@@ -1,0 +1,373 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* =========================================================
+   THEME VARIABLES
+========================================================= */
+
+:root {
+  color-scheme: light;
+
+  --background: #eef7ff;
+  --foreground: #211018;
+
+  --pink: #ec4899;
+  --pink-light: #f9a8d4;
+  --pink-dark: #be185d;
+
+  --glass-bg: rgba(255, 255, 255, 0.58);
+  --glass-border: rgba(236, 72, 153, 0.2);
+  --grid-color: rgba(236, 72, 153, 0.07);
+}
+
+html.dark {
+  color-scheme: dark;
+
+  --background: #030106;
+  --foreground: #fdf2f8;
+
+  --glass-bg: rgba(12, 5, 16, 0.56);
+  --glass-border: rgba(244, 114, 182, 0.16);
+  --grid-color: rgba(255, 255, 255, 0.035);
+}
+
+/* =========================================================
+   GLOBAL RESET
+========================================================= */
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  background: var(--background);
+}
+
+body {
+  position: relative;
+  margin: 0;
+  min-height: 100vh;
+  overflow-x: hidden;
+
+  background: transparent;
+  color: var(--foreground);
+
+  font-family: var(--font-inter), sans-serif;
+
+  transition:
+    color 0.4s ease,
+    background-color 0.4s ease;
+}
+
+/* Keep all website content above the fixed background. */
+
+body > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* =========================================================
+   FIXED SKY/GALAXY BACKGROUND
+========================================================= */
+
+body::before {
+  content: "";
+
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+
+  pointer-events: none;
+
+  background:
+    radial-gradient(
+      circle at 15% 18%,
+      rgba(255, 255, 255, 0.95) 0 3%,
+      transparent 12%
+    ),
+    radial-gradient(
+      circle at 80% 15%,
+      rgba(255, 218, 238, 0.78),
+      transparent 27%
+    ),
+    radial-gradient(
+      circle at 25% 82%,
+      rgba(189, 221, 255, 0.75),
+      transparent 33%
+    ),
+    linear-gradient(
+      145deg,
+      #eaf7ff 0%,
+      #fce7f3 48%,
+      #dbeafe 100%
+    );
+
+  background-size: cover;
+  background-position: center;
+
+  transition:
+    background 0.7s ease,
+    opacity 0.7s ease;
+}
+
+/* Light-mode clouds and sparkles. */
+
+body::after {
+  content: "";
+
+  position: fixed;
+  inset: -10%;
+  z-index: -1;
+
+  pointer-events: none;
+
+  opacity: 0.7;
+
+  background-image:
+    radial-gradient(
+      ellipse at 15% 30%,
+      rgba(255, 255, 255, 0.78) 0 7%,
+      transparent 15%
+    ),
+    radial-gradient(
+      ellipse at 31% 34%,
+      rgba(255, 255, 255, 0.62) 0 9%,
+      transparent 18%
+    ),
+    radial-gradient(
+      ellipse at 72% 69%,
+      rgba(255, 255, 255, 0.67) 0 8%,
+      transparent 17%
+    ),
+    radial-gradient(
+      ellipse at 87% 64%,
+      rgba(255, 255, 255, 0.55) 0 7%,
+      transparent 16%
+    ),
+    radial-gradient(circle, rgba(236, 72, 153, 0.65) 0 1px, transparent 2px);
+
+  background-size:
+    800px 420px,
+    900px 460px,
+    850px 440px,
+    920px 480px,
+    90px 90px;
+
+  animation: sky-drift 28s ease-in-out infinite alternate;
+
+  transition:
+    background-image 0.7s ease,
+    opacity 0.7s ease;
+}
+
+/* Dark-mode galaxy. */
+
+html.dark body::before {
+  background:
+    radial-gradient(
+      circle at 18% 20%,
+      rgba(236, 72, 153, 0.26),
+      transparent 28%
+    ),
+    radial-gradient(
+      circle at 82% 22%,
+      rgba(139, 92, 246, 0.25),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 48% 85%,
+      rgba(37, 99, 235, 0.2),
+      transparent 35%
+    ),
+    radial-gradient(
+      ellipse at center,
+      rgba(88, 28, 135, 0.12),
+      transparent 58%
+    ),
+    linear-gradient(
+      145deg,
+      #020104 0%,
+      #090311 45%,
+      #080b1c 100%
+    );
+}
+
+/* Dark-mode fixed stars and galaxy dust. */
+
+html.dark body::after {
+  opacity: 0.9;
+
+  background-image:
+    radial-gradient(circle, rgba(255, 255, 255, 0.95) 0 1px, transparent 1.7px),
+    radial-gradient(circle, rgba(249, 168, 212, 0.85) 0 1px, transparent 1.8px),
+    radial-gradient(circle, rgba(196, 181, 253, 0.8) 0 1.2px, transparent 2px),
+    linear-gradient(
+      115deg,
+      transparent 0%,
+      transparent 47%,
+      rgba(255, 255, 255, 0.04) 49%,
+      transparent 51%
+    );
+
+  background-size:
+    72px 72px,
+    115px 115px,
+    165px 165px,
+    100% 100%;
+
+  background-position:
+    0 0,
+    24px 36px,
+    65px 18px,
+    center;
+
+  animation: galaxy-drift 32s ease-in-out infinite alternate;
+}
+
+/* =========================================================
+   SUBTLE FIXED GRID
+========================================================= */
+
+.fixed-background-grid {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+
+  pointer-events: none;
+
+  opacity: 0.25;
+
+  background-image:
+    linear-gradient(var(--grid-color) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+
+  background-size: 48px 48px;
+
+  mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    black 20%,
+    black 75%,
+    transparent
+  );
+}
+
+/* =========================================================
+   ANIMATIONS
+========================================================= */
+
+@keyframes sky-drift {
+  from {
+    transform: translate3d(-1.5%, 0, 0) scale(1);
+  }
+
+  to {
+    transform: translate3d(1.5%, -1%, 0) scale(1.03);
+  }
+}
+
+@keyframes galaxy-drift {
+  from {
+    transform: translate3d(-1%, -0.5%, 0) scale(1);
+    opacity: 0.72;
+  }
+
+  to {
+    transform: translate3d(1%, 0.5%, 0) scale(1.025);
+    opacity: 1;
+  }
+}
+
+/* =========================================================
+   REUSABLE STYLES
+========================================================= */
+
+::selection {
+  background: rgba(236, 72, 153, 0.35);
+}
+
+.glass {
+  border: 1px solid var(--glass-border);
+  background: var(--glass-bg);
+
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+
+  transition:
+    background-color 0.4s ease,
+    border-color 0.4s ease;
+}
+
+.section-wrap {
+  width: min(1180px, calc(100% - 2rem));
+  margin-inline: auto;
+  padding-block: 6rem;
+}
+
+.glow-text {
+  text-shadow: 0 0 30px rgba(244, 114, 182, 0.3);
+}
+
+.card-grid {
+  background:
+    linear-gradient(
+      135deg,
+      rgba(236, 72, 153, 0.08),
+      rgba(255, 255, 255, 0.025)
+    );
+}
+
+.focus-ring:focus-visible {
+  outline: 2px solid var(--pink-light);
+  outline-offset: 4px;
+}
+
+/* =========================================================
+   LIGHT-MODE TEXT CORRECTIONS
+========================================================= */
+
+html:not(.dark) .text-white {
+  color: #211018 !important;
+}
+
+html:not(.dark) .text-white\/50,
+html:not(.dark) .text-white\/60 {
+  color: #6b4657 !important;
+}
+
+html:not(.dark) .text-white\/70 {
+  color: #51303f !important;
+}
+
+html:not(.dark) .text-white\/80 {
+  color: #38202b !important;
+}
+
+html:not(.dark) .text-pink-300,
+html:not(.dark) .text-pink-400 {
+  color: #db2777 !important;
+}
+
+html:not(.dark) .text-pink-500 {
+  color: #be185d !important;
+}
+
+/* =========================================================
+   ACCESSIBILITY
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+  }
+}
