@@ -30,10 +30,10 @@ export const profile = {
 
   bio: "I am a frontend-focused BSIT student who enjoys creating clean and user-friendly interfaces. I use Figma for UI/UX design and continue improving my HTML and CSS skills while learning databases, React, and Tailwind CSS.",
 
-  email: "mariahvillasan@example.com",
+  email: "mariahvillasan@gmail.com",
 
   socials: {
-    github: "https://github.com/",
+    github: "https://github.com/mrhvllsn",
     linkedin: "https://linkedin.com/",
     twitter: "https://x.com/",
   } satisfies Socials,
@@ -68,6 +68,7 @@ export const skills = {
     "React",
     "Tailwind CSS",
     "Database",
+    "API Integration",
     "PHP",
   ],
 
@@ -82,9 +83,9 @@ export const projects: Project[] = [
     title: "Personal Portfolio Website",
 
     description:
-      "A personal learning project created to practice responsive layouts, UI design, React, Next.js, TypeScript, and Tailwind CSS.",
+      "A personal portfolio website made using Next.js, TypeScript, and Tailwind CSS.",
 
-    image: "/projects/project1.svg",
+    image: "/projects/aya-portfolio.jpeg",
 
     technologies: [
       "Next.js",
@@ -92,35 +93,35 @@ export const projects: Project[] = [
       "Tailwind CSS",
     ],
 
-    github: "https://github.com/",
-    demo: "#",
+    github: "https://github.com/mrhvllsn",
+    demo: "https://mariah-portfolio-rosy.vercel.app/",
   },
 
   {
-    title: "Printing Services System Concept",
+    title: "PrintHub",
 
     description:
-      "A school or practice system concept for organizing customers, printing services, and records. This project is still being improved.",
+      "A printing services web system for submitting printing requests, uploading documents, monitoring requests, and managing printing supplies.",
 
-    image: "/projects/project2.svg",
+    image: "/projects/printhub.jpeg",
 
     technologies: [
       "UI/UX Design",
-      "Figma",
+      "JavaScript",
       "Database",
     ],
 
-    github: "https://github.com/",
-    demo: "#",
+    github: "https://github.com/mrhvllsn",
+    demo: "https://printhub-mariah.vercel.app/",
   },
 
   {
-    title: "Student Management App Concept",
+    title: "ReadEm",
 
     description:
-      "A CRUD-based school project concept for managing student information while practicing interface design and database fundamentals.",
+      "An e-library management system for organizing and managing digital book collections.",
 
-    image: "/projects/project3.svg",
+    image: "/projects/Read.jpeg",
 
     technologies: [
       "HTML",
@@ -129,8 +130,27 @@ export const projects: Project[] = [
       "MySQL",
     ],
 
-    github: "https://github.com/",
-    demo: "#",
+    github: "https://github.com/mrhvllsn",
+    demo: "https://readem.vercel.app/",
+  },
+
+  {
+    title: "StockWise Inventory",
+
+    description:
+      "A JavaScript inventory management system for adding, editing, searching, and monitoring products and stock levels. Inventory information is saved using browser local storage.",
+
+    image: "/projects/Stockwise.jpeg",
+
+    technologies: [
+      "HTML",
+      "CSS",
+      "JavaScript",
+      "Local Storage",
+    ],
+
+    github: "https://github.com/mrhvllsn",
+    demo: "https://stockwise-inventory-gilt.vercel.app/",
   },
 ];
 
