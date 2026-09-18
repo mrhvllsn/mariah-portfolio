@@ -27,8 +27,8 @@ html.dark {
   --background: #030106;
   --foreground: #fdf2f8;
 
-  --glass-bg: rgba(12, 5, 16, 0.56);
-  --glass-border: rgba(244, 114, 182, 0.16);
+  --glass-bg: rgba(12, 5, 16, 0.62);
+  --glass-border: rgba(244, 114, 182, 0.2);
   --grid-color: rgba(255, 255, 255, 0.035);
 }
 
@@ -47,6 +47,7 @@ html {
 
 body {
   position: relative;
+
   margin: 0;
   min-height: 100vh;
   overflow-x: hidden;
@@ -61,7 +62,7 @@ body {
     background-color 0.4s ease;
 }
 
-/* Keep all website content above the fixed background. */
+/* Keep the website content above the backgrounds. */
 
 body > * {
   position: relative;
@@ -69,14 +70,14 @@ body > * {
 }
 
 /* =========================================================
-   FIXED SKY/GALAXY BACKGROUND
+   LIGHT-MODE SKY
 ========================================================= */
 
 body::before {
   content: "";
 
   position: fixed;
-  inset: 0;
+  inset: -8%;
   z-index: -2;
 
   pointer-events: none;
@@ -107,9 +108,7 @@ body::before {
   background-size: cover;
   background-position: center;
 
-  transition:
-    background 0.7s ease,
-    opacity 0.7s ease;
+  animation: sky-movement 20s ease-in-out infinite;
 }
 
 /* Light-mode clouds and sparkles. */
@@ -118,7 +117,7 @@ body::after {
   content: "";
 
   position: fixed;
-  inset: -10%;
+  inset: -12%;
   z-index: -1;
 
   pointer-events: none;
@@ -146,7 +145,11 @@ body::after {
       rgba(255, 255, 255, 0.55) 0 7%,
       transparent 16%
     ),
-    radial-gradient(circle, rgba(236, 72, 153, 0.65) 0 1px, transparent 2px);
+    radial-gradient(
+      circle,
+      rgba(236, 72, 153, 0.65) 0 1px,
+      transparent 2px
+    );
 
   background-size:
     800px 420px,
@@ -155,79 +158,227 @@ body::after {
     920px 480px,
     90px 90px;
 
-  animation: sky-drift 28s ease-in-out infinite alternate;
-
-  transition:
-    background-image 0.7s ease,
-    opacity 0.7s ease;
+  animation: cloud-movement 28s ease-in-out infinite alternate;
 }
 
-/* Dark-mode galaxy. */
+/* =========================================================
+   DARK-MODE GALAXY
+========================================================= */
 
 html.dark body::before {
-  background:
+  opacity: 1;
+
+  background-image:
     radial-gradient(
-      circle at 18% 20%,
-      rgba(236, 72, 153, 0.26),
-      transparent 28%
+      circle at 15% 35%,
+      rgba(236, 72, 153, 0.32),
+      transparent 32%
     ),
     radial-gradient(
-      circle at 82% 22%,
-      rgba(139, 92, 246, 0.25),
-      transparent 30%
+      circle at 85% 25%,
+      rgba(139, 92, 246, 0.3),
+      transparent 34%
     ),
     radial-gradient(
-      circle at 48% 85%,
-      rgba(37, 99, 235, 0.2),
-      transparent 35%
+      circle at 55% 90%,
+      rgba(37, 99, 235, 0.25),
+      transparent 38%
     ),
     radial-gradient(
-      ellipse at center,
-      rgba(88, 28, 135, 0.12),
-      transparent 58%
+      ellipse at 50% 50%,
+      rgba(168, 85, 247, 0.12),
+      transparent 52%
+    ),
+    radial-gradient(
+      ellipse at 40% 70%,
+      rgba(236, 72, 153, 0.08),
+      transparent 45%
     ),
     linear-gradient(
       145deg,
-      #020104 0%,
-      #090311 45%,
-      #080b1c 100%
+      #010003 0%,
+      #08020f 42%,
+      #050817 72%,
+      #010104 100%
     );
+
+  background-size: 100% 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  will-change: transform, filter;
+
+  animation: galaxy-movement 18s ease-in-out infinite;
 }
 
-/* Dark-mode fixed stars and galaxy dust. */
+/* =========================================================
+   DARK-MODE SMALL STARS
+========================================================= */
 
 html.dark body::after {
-  opacity: 0.9;
+  opacity: 0.95;
 
   background-image:
-    radial-gradient(circle, rgba(255, 255, 255, 0.95) 0 1px, transparent 1.7px),
-    radial-gradient(circle, rgba(249, 168, 212, 0.85) 0 1px, transparent 1.8px),
-    radial-gradient(circle, rgba(196, 181, 253, 0.8) 0 1.2px, transparent 2px),
-    linear-gradient(
-      115deg,
-      transparent 0%,
-      transparent 47%,
-      rgba(255, 255, 255, 0.04) 49%,
-      transparent 51%
+    radial-gradient(
+      circle,
+      rgba(255, 255, 255, 1) 0 1px,
+      transparent 1.8px
+    ),
+    radial-gradient(
+      circle,
+      rgba(249, 168, 212, 0.95) 0 1.2px,
+      transparent 2px
+    ),
+    radial-gradient(
+      circle,
+      rgba(196, 181, 253, 0.9) 0 1.4px,
+      transparent 2.2px
+    ),
+    radial-gradient(
+      circle,
+      rgba(147, 197, 253, 0.85) 0 0.8px,
+      transparent 1.8px
     );
 
   background-size:
     72px 72px,
     115px 115px,
     165px 165px,
-    100% 100%;
+    220px 220px;
 
   background-position:
     0 0,
     24px 36px,
     65px 18px,
-    center;
+    105px 80px;
 
-  animation: galaxy-drift 32s ease-in-out infinite alternate;
+  filter:
+    drop-shadow(0 0 3px rgba(255, 255, 255, 0.6))
+    drop-shadow(0 0 7px rgba(236, 72, 153, 0.35));
+
+  will-change: transform, opacity, background-position;
+
+  animation:
+    stars-movement 26s linear infinite,
+    stars-twinkle 3.5s ease-in-out infinite alternate;
 }
 
 /* =========================================================
-   SUBTLE FIXED GRID
+   SHOOTING-STAR LAYER
+========================================================= */
+
+.shooting-stars {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+
+  width: 100vw;
+  height: 100vh;
+
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* Shooting stars are only visible in dark mode. */
+
+html:not(.dark) .shooting-stars {
+  display: none;
+}
+
+/* =========================================================
+   INDIVIDUAL SHOOTING STAR
+========================================================= */
+
+.shooting-star {
+  position: absolute;
+
+  top: var(--star-top);
+  left: var(--star-left);
+
+  width: var(--star-width);
+  height: 2px;
+
+  opacity: 0;
+  border-radius: 999px;
+
+  /*
+   * The left side is the bright meteor head.
+   * The right side fades into the tail.
+   */
+
+  background: linear-gradient(
+    90deg,
+    #ffffff 0%,
+    rgba(255, 255, 255, 0.95) 4%,
+    rgba(224, 242, 254, 0.75) 18%,
+    rgba(191, 219, 254, 0.35) 45%,
+    rgba(147, 197, 253, 0.1) 72%,
+    transparent 100%
+  );
+
+  box-shadow:
+    0 0 2px rgba(255, 255, 255, 0.9),
+    0 0 5px rgba(191, 219, 254, 0.55);
+
+  transform-origin: left center;
+
+  will-change: transform, opacity;
+
+  animation:
+    meteor-shower
+    var(--star-duration)
+    linear
+    var(--star-delay)
+    infinite;
+}
+
+/* Bright meteor head on the lower-left end. */
+
+.shooting-star::before {
+  content: "";
+
+  position: absolute;
+  top: 50%;
+  left: -2px;
+
+  width: 5px;
+  height: 5px;
+
+  border-radius: 50%;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 0 4px #ffffff,
+    0 0 8px rgba(219, 234, 254, 0.95),
+    0 0 15px rgba(147, 197, 253, 0.6);
+
+  transform: translateY(-50%);
+}
+
+/* Soft light around the meteor head. */
+
+.shooting-star::after {
+  content: "";
+
+  position: absolute;
+  top: 50%;
+  left: -6px;
+
+  width: 14px;
+  height: 14px;
+
+  border-radius: 50%;
+
+  background: rgba(255, 255, 255, 0.12);
+
+  filter: blur(4px);
+
+  transform: translateY(-50%);
+}
+
+/* =========================================================
+   FIXED BACKGROUND GRID
 ========================================================= */
 
 .fixed-background-grid {
@@ -240,8 +391,15 @@ html.dark body::after {
   opacity: 0.25;
 
   background-image:
-    linear-gradient(var(--grid-color) 1px, transparent 1px),
-    linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+    linear-gradient(
+      var(--grid-color) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      var(--grid-color) 1px,
+      transparent 1px
+    );
 
   background-size: 48px 48px;
 
@@ -252,31 +410,166 @@ html.dark body::after {
     black 75%,
     transparent
   );
+
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    black 20%,
+    black 75%,
+    transparent
+  );
 }
 
 /* =========================================================
-   ANIMATIONS
+   BACKGROUND ANIMATIONS
 ========================================================= */
 
-@keyframes sky-drift {
-  from {
-    transform: translate3d(-1.5%, 0, 0) scale(1);
+@keyframes sky-movement {
+  0%,
+  100% {
+    transform: translate3d(-1%, 0, 0) scale(1.04);
   }
 
-  to {
-    transform: translate3d(1.5%, -1%, 0) scale(1.03);
+  50% {
+    transform: translate3d(1%, -1%, 0) scale(1.07);
   }
 }
 
-@keyframes galaxy-drift {
+@keyframes cloud-movement {
   from {
-    transform: translate3d(-1%, -0.5%, 0) scale(1);
-    opacity: 0.72;
+    transform: translate3d(-2%, 0, 0) scale(1);
   }
 
   to {
-    transform: translate3d(1%, 0.5%, 0) scale(1.025);
+    transform: translate3d(2%, -1%, 0) scale(1.04);
+  }
+}
+
+@keyframes galaxy-movement {
+  0%,
+  100% {
+    transform: translate3d(-1.5%, -1%, 0) scale(1.05);
+    filter: saturate(1) brightness(0.85);
+  }
+
+  25% {
+    transform: translate3d(1%, -1.5%, 0) scale(1.08);
+    filter: saturate(1.12) brightness(0.92);
+  }
+
+  50% {
+    transform: translate3d(1.5%, 1%, 0) scale(1.06);
+    filter: saturate(1.2) brightness(1);
+  }
+
+  75% {
+    transform: translate3d(-1%, 1.5%, 0) scale(1.09);
+    filter: saturate(1.1) brightness(0.92);
+  }
+}
+
+@keyframes stars-movement {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+
+    background-position:
+      0 0,
+      24px 36px,
+      65px 18px,
+      105px 80px;
+  }
+
+  50% {
+    transform: translate3d(-1.5%, 1%, 0) scale(1.025);
+  }
+
+  100% {
+    transform: translate3d(-3%, 2%, 0) scale(1.05);
+
+    background-position:
+      72px 144px,
+      -91px 266px,
+      230px 348px,
+      -115px 520px;
+  }
+}
+
+@keyframes stars-twinkle {
+  0% {
+    opacity: 0.55;
+
+    filter:
+      brightness(0.8)
+      drop-shadow(0 0 2px rgba(255, 255, 255, 0.35))
+      drop-shadow(0 0 5px rgba(236, 72, 153, 0.2));
+  }
+
+  50% {
     opacity: 1;
+
+    filter:
+      brightness(1.4)
+      drop-shadow(0 0 4px rgba(255, 255, 255, 0.8))
+      drop-shadow(0 0 9px rgba(236, 72, 153, 0.5));
+  }
+
+  100% {
+    opacity: 0.72;
+
+    filter:
+      brightness(1.05)
+      drop-shadow(0 0 3px rgba(255, 255, 255, 0.5))
+      drop-shadow(0 0 7px rgba(139, 92, 246, 0.4));
+  }
+}
+
+/* =========================================================
+   SHOOTING-STAR ANIMATION
+========================================================= */
+
+@keyframes meteor-shower {
+  0% {
+    opacity: 0;
+
+    transform:
+      translate3d(0, 0, 0)
+      rotate(var(--star-angle))
+      scaleX(0.3);
+  }
+
+  5% {
+    opacity: 0;
+  }
+
+  10% {
+    opacity: 1;
+  }
+
+  35% {
+    opacity: 1;
+
+    transform:
+      translate3d(-36vw, 24vh, 0)
+      rotate(var(--star-angle))
+      scaleX(1);
+  }
+
+  60% {
+    opacity: 0;
+
+    transform:
+      translate3d(-85vw, 57vh, 0)
+      rotate(var(--star-angle))
+      scaleX(0.55);
+  }
+
+  100% {
+    opacity: 0;
+
+    transform:
+      translate3d(-85vw, 57vh, 0)
+      rotate(var(--star-angle))
+      scaleX(0.55);
   }
 }
 
@@ -352,6 +645,38 @@ html:not(.dark) .text-pink-400 {
 
 html:not(.dark) .text-pink-500 {
   color: #be185d !important;
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 768px) {
+  .section-wrap {
+    width: min(100% - 1.25rem, 1180px);
+    padding-block: 4rem;
+  }
+
+  html.dark body::before {
+    background-size: cover;
+    animation-duration: 22s;
+  }
+
+  html.dark body::after {
+    animation:
+      stars-movement 32s linear infinite,
+      stars-twinkle 4s ease-in-out infinite alternate;
+  }
+
+  .shooting-star {
+    width: 110px;
+    height: 1px;
+  }
+
+  .shooting-star::before {
+    width: 3px;
+    height: 3px;
+  }
 }
 
 /* =========================================================

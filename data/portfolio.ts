@@ -156,55 +156,77 @@ export const projects: Project[] = [
 
 export const experience: ExperienceItem[] = [
   {
-    date: "Present",
+    date: "2026",
 
-    title: "BSIT Student",
+    title: "Personal Portfolio Website",
 
-    organization: "Academic Learning",
+    organization: "4th Year College • Personal Project",
 
     description:
-      "Studying information technology while developing foundational skills in frontend development, interface design, and databases.",
+      "Created my personal portfolio website to showcase my background, skills, projects, and learning journey. The website includes responsive pages, animations, light and dark modes, project previews, contact links, and a downloadable resume.",
+
+    technologies: [
+      "Next.js",
+      "React",
+      "TypeScript",
+      "Tailwind CSS",
+      "Framer Motion",
+      "Vercel",
+    ],
+  },
+
+  {
+    date: "2025",
+
+    title: "PrintHub",
+
+    organization: "3rd Year College • School Project",
+
+    description:
+      "Developed a printing services web system for submitting printing requests, uploading documents, monitoring pending orders, managing customers, and tracking printing supplies using a database.",
+
+    technologies: [
+      "UI/UX Design",
+      "JavaScript",
+      "React",
+      "Node.js",
+      "Database",
+    ],
+  },
+
+  {
+    date: "2024",
+
+    title: "ReadEm",
+
+    organization: "2nd Year College • School Project",
+
+    description:
+      "Created an e-library management system for organizing and managing digital book collections. This project helped me practice interface design, book management, and database fundamentals.",
 
     technologies: [
       "HTML",
       "CSS",
-      "Figma",
-      "UI/UX",
+      "PHP",
+      "MySQL",
     ],
   },
 
   {
-    date: "Currently Learning",
+    date: "2024",
 
-    title: "Frontend Development Practice",
+    title: "StockWise Inventory",
 
-    organization: "Personal Learning",
-
-    description:
-      "Practicing responsive web design and gradually learning React and Tailwind CSS through school activities and personal projects.",
-
-    technologies: [
-      "React",
-      "Tailwind CSS",
-      "Responsive Design",
-    ],
-  },
-
-  {
-    date: "Ongoing",
-
-    title: "UI/UX Design Practice",
-
-    organization: "Student Projects",
+    organization: "2nd Year College • School Project",
 
     description:
-      "Creating wireframes, prototypes, and user-friendly interface concepts using Figma and Canva.",
+      "Created an inventory management system for adding, editing, searching, and monitoring products and stock levels. The inventory records are saved in the browser using local storage.",
 
     technologies: [
-      "Figma",
-      "Canva",
-      "Wireframing",
-      "Prototyping",
+      "HTML",
+      "CSS",
+      "JavaScript",
+      "Local Storage",
     ],
   },
 ];

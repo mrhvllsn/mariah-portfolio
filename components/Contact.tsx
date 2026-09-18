@@ -4,6 +4,7 @@ import type { ReactNode } from "react";
 import { motion } from "framer-motion";
 import {
   FiArrowUpRight,
+  FiDownload,
   FiGithub,
   FiLinkedin,
   FiMail,
@@ -49,15 +50,12 @@ export default function Contact() {
         text-zinc-900
         transition-colors
         duration-500
-
         sm:px-8
         lg:px-12
-
         dark:text-white
       "
     >
-      {/* BACKGROUND DECORATIONS */}
-
+      {/* Background pink glow */}
       <div
         className="
           pointer-events-none
@@ -69,11 +67,10 @@ export default function Contact() {
           rounded-full
           bg-pink-500/10
           blur-[130px]
-
-          dark:bg-pink-500/10
         "
       />
 
+      {/* Background purple glow */}
       <div
         className="
           pointer-events-none
@@ -85,13 +82,10 @@ export default function Contact() {
           rounded-full
           bg-purple-500/10
           blur-[150px]
-
-          dark:bg-purple-500/10
         "
       />
 
-      {/* BACKGROUND LINES */}
-
+      {/* Background lines */}
       <div
         className="
           pointer-events-none
@@ -99,13 +93,11 @@ export default function Contact() {
           inset-0
           bg-[linear-gradient(rgba(0,0,0,0.04)_1px,transparent_1px)]
           bg-[size:100%_80px]
-
           dark:bg-[linear-gradient(rgba(255,255,255,0.025)_1px,transparent_1px)]
         "
       />
 
-      {/* MAIN CONTENT */}
-
+      {/* Main content */}
       <div
         className="
           relative
@@ -116,13 +108,11 @@ export default function Contact() {
           max-w-6xl
           items-center
           gap-16
-
           lg:grid-cols-[1.15fr_.85fr]
           lg:gap-20
         "
       >
-        {/* LEFT CONTENT */}
-
+        {/* Left content */}
         <motion.div
           initial={{
             opacity: 0,
@@ -141,8 +131,7 @@ export default function Contact() {
             ease: "easeOut",
           }}
         >
-          {/* SECTION NUMBER */}
-
+          {/* Section number */}
           <div className="mb-7 flex items-center gap-3">
             <span className="h-px w-10 bg-pink-500" />
 
@@ -153,7 +142,6 @@ export default function Contact() {
                 uppercase
                 tracking-[0.3em]
                 text-pink-500
-
                 dark:text-pink-400
               "
             >
@@ -161,8 +149,7 @@ export default function Contact() {
             </p>
           </div>
 
-          {/* MAIN TITLE */}
-
+          {/* Main title */}
           <h2
             className="
               max-w-3xl
@@ -182,7 +169,6 @@ export default function Contact() {
               className="
                 text-transparent
                 [-webkit-text-stroke:1.5px_#18181b]
-
                 dark:[-webkit-text-stroke:1.5px_white]
               "
             >
@@ -190,8 +176,7 @@ export default function Contact() {
             </span>
           </h2>
 
-          {/* DESCRIPTION */}
-
+          {/* Description */}
           <p
             className="
               mt-10
@@ -199,9 +184,7 @@ export default function Contact() {
               text-base
               leading-7
               text-zinc-600
-
               sm:text-lg
-
               dark:text-zinc-400
             "
           >
@@ -210,9 +193,9 @@ export default function Contact() {
             meaningful together.
           </p>
 
-          {/* BUTTON AND AVAILABILITY */}
-
+          {/* Contact and resume buttons */}
           <div className="mt-9 flex flex-wrap items-center gap-4">
+            {/* Start conversation button */}
             <motion.a
               href={`mailto:${profile.email}`}
               whileHover={{
@@ -235,10 +218,8 @@ export default function Contact() {
                 text-white
                 transition-all
                 duration-300
-
                 hover:bg-pink-500
                 hover:shadow-[0_12px_30px_rgba(236,72,153,0.25)]
-
                 dark:bg-white
                 dark:text-black
                 dark:hover:bg-pink-500
@@ -252,15 +233,60 @@ export default function Contact() {
                   text-lg
                   transition-transform
                   duration-300
-
                   group-hover:-translate-y-0.5
                   group-hover:translate-x-0.5
                 "
               />
             </motion.a>
 
-            {/* AVAILABILITY */}
+            {/* Download resume button */}
+            <motion.a
+              href="/resume/Mariah-Villasan-Resume.docx"
+              download="Mariah-Villasan-Resume.docx"
+              whileHover={{
+                y: -3,
+              }}
+              whileTap={{
+                scale: 0.97,
+              }}
+              className="
+                group
+                inline-flex
+                items-center
+                gap-3
+                rounded-full
+                border
+                border-pink-500
+                bg-transparent
+                px-6
+                py-3
+                text-sm
+                font-semibold
+                text-pink-600
+                transition-all
+                duration-300
+                hover:bg-pink-500
+                hover:text-white
+                hover:shadow-[0_12px_30px_rgba(236,72,153,0.25)]
+                dark:border-pink-400
+                dark:text-pink-300
+                dark:hover:bg-pink-500
+                dark:hover:text-white
+              "
+            >
+              Download Resume
 
+              <FiDownload
+                className="
+                  text-lg
+                  transition-transform
+                  duration-300
+                  group-hover:translate-y-0.5
+                "
+              />
+            </motion.a>
+
+            {/* Availability */}
             <div
               className="
                 flex
@@ -268,7 +294,6 @@ export default function Contact() {
                 gap-3
                 text-sm
                 text-zinc-600
-
                 dark:text-zinc-400
               "
             >
@@ -303,8 +328,7 @@ export default function Contact() {
           </div>
         </motion.div>
 
-        {/* RIGHT CONTENT */}
-
+        {/* Right content */}
         <motion.div
           initial={{
             opacity: 0,
@@ -325,8 +349,7 @@ export default function Contact() {
           }}
           className="relative"
         >
-          {/* VERTICAL LINE */}
-
+          {/* Vertical decorative line */}
           <div
             className="
               absolute
@@ -339,13 +362,11 @@ export default function Contact() {
               from-transparent
               via-pink-500/50
               to-transparent
-
               lg:block
             "
           />
 
-          {/* CONTACT CARDS */}
-
+          {/* Contact cards */}
           <div className="space-y-4">
             {contactCards.map((contact, index) => {
               const Icon = contact.icon;
@@ -389,12 +410,9 @@ export default function Contact() {
                     backdrop-blur-md
                     transition-all
                     duration-300
-
                     hover:border-pink-500/50
                     hover:bg-pink-50
-
                     sm:p-5
-
                     dark:border-white/10
                     dark:bg-white/[0.035]
                     dark:shadow-none
@@ -402,8 +420,7 @@ export default function Contact() {
                     dark:hover:bg-pink-500/[0.07]
                   "
                 >
-                  {/* CARD ICON */}
-
+                  {/* Card icon */}
                   <span
                     className="
                       flex
@@ -420,11 +437,9 @@ export default function Contact() {
                       text-pink-500
                       transition-all
                       duration-300
-
                       group-hover:border-pink-500
                       group-hover:bg-pink-500
                       group-hover:text-white
-
                       dark:border-white/10
                       dark:bg-white/5
                       dark:text-pink-400
@@ -436,8 +451,7 @@ export default function Contact() {
                     <Icon />
                   </span>
 
-                  {/* CARD INFORMATION */}
-
+                  {/* Card information */}
                   <span className="min-w-0 flex-1">
                     <span
                       className="
@@ -460,9 +474,7 @@ export default function Contact() {
                         text-sm
                         font-medium
                         text-zinc-800
-
                         sm:text-base
-
                         dark:text-zinc-200
                       "
                     >
@@ -470,19 +482,16 @@ export default function Contact() {
                     </span>
                   </span>
 
-                  {/* CARD ARROW */}
-
+                  {/* Card arrow */}
                   <FiArrowUpRight
                     className="
                       text-xl
                       text-zinc-400
                       transition-all
                       duration-300
-
                       group-hover:-translate-y-1
                       group-hover:translate-x-1
                       group-hover:text-pink-500
-
                       dark:text-zinc-600
                       dark:group-hover:text-pink-400
                     "
@@ -492,8 +501,7 @@ export default function Contact() {
             })}
           </div>
 
-          {/* SOCIAL LINKS */}
-
+          {/* Social links */}
           <div
             className="
               mt-7
@@ -511,7 +519,6 @@ export default function Contact() {
                 uppercase
                 tracking-[0.25em]
                 text-zinc-500
-
                 dark:text-zinc-600
               "
             >
@@ -547,8 +554,7 @@ export default function Contact() {
         </motion.div>
       </div>
 
-      {/* SIDE TEXT */}
-
+      {/* Side text */}
       <p
         className="
           absolute
@@ -561,9 +567,7 @@ export default function Contact() {
           tracking-[0.3em]
           text-zinc-400
           [writing-mode:vertical-rl]
-
           xl:block
-
           dark:text-zinc-700
         "
       >
@@ -573,19 +577,11 @@ export default function Contact() {
   );
 }
 
-/* =========================================================
-   SOCIAL LINK PROPS
-========================================================= */
-
 interface SocialLinkProps {
   href: string;
   label: string;
   icon: ReactNode;
 }
-
-/* =========================================================
-   SOCIAL LINK COMPONENT
-========================================================= */
 
 function SocialLink({ href, label, icon }: SocialLinkProps) {
   const isEmail = href.startsWith("mailto:");
@@ -617,11 +613,9 @@ function SocialLink({ href, label, icon }: SocialLinkProps) {
         shadow-sm
         transition-all
         duration-300
-
         hover:border-pink-500
         hover:bg-pink-500
         hover:text-white
-
         dark:border-white/10
         dark:bg-white/[0.04]
         dark:text-zinc-400

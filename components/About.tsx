@@ -1,1488 +1,683 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { Sparkles } from "lucide-react";
-import { profile } from "@/data/portfolio";
+import Image from "next/image";
+import { useEffect, useState, type ReactNode } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import {
+  ChevronLeft,
+  ChevronRight,
+  Code2,
+  ExternalLink,
+  GraduationCap,
+  Heart,
+  Layers3,
+  Palette,
+  Sparkles,
+  X,
+} from "lucide-react";
 
-/* =========================================================
-   SKILLS
-========================================================= */
+import { profile } from "@/data/portfolio";
 
 const skills = [
   "UI/UX Design",
   "Figma",
-  "HTML / CSS",
-  "Web Design",
+  "HTML",
+  "CSS",
+  "JavaScript",
+  "Responsive Design",
+  "Wireframing",
   "Prototyping",
   "Canva",
-  "Wireframing",
-  "Responsive Design",
 ];
 
-/* =========================================================
-   SPACE STARS
-
-   These stars use fixed positions so they will not cause
-   hydration errors in Next.js.
-========================================================= */
-
-const stars = [
-  { left: "4%", top: "12%", size: 2, delay: 0 },
-  { left: "9%", top: "73%", size: 1, delay: 0.8 },
-  { left: "14%", top: "37%", size: 2, delay: 1.4 },
-  { left: "19%", top: "88%", size: 1, delay: 0.3 },
-  { left: "24%", top: "17%", size: 1, delay: 1.8 },
-  { left: "29%", top: "59%", size: 2, delay: 0.6 },
-  { left: "34%", top: "8%", size: 1, delay: 1.1 },
-  { left: "39%", top: "82%", size: 2, delay: 2 },
-  { left: "44%", top: "29%", size: 1, delay: 0.2 },
-  { left: "49%", top: "67%", size: 1, delay: 1.6 },
-  { left: "54%", top: "14%", size: 2, delay: 0.5 },
-  { left: "59%", top: "91%", size: 1, delay: 1.3 },
-  { left: "64%", top: "42%", size: 2, delay: 0.9 },
-  { left: "69%", top: "6%", size: 1, delay: 1.9 },
-  { left: "74%", top: "76%", size: 2, delay: 0.4 },
-  { left: "79%", top: "25%", size: 1, delay: 1.5 },
-  { left: "84%", top: "55%", size: 2, delay: 0.7 },
-  { left: "89%", top: "11%", size: 1, delay: 2.1 },
-  { left: "94%", top: "84%", size: 2, delay: 1 },
-  { left: "97%", top: "39%", size: 1, delay: 1.7 },
-  { left: "7%", top: "48%", size: 1, delay: 2.2 },
-  { left: "17%", top: "5%", size: 2, delay: 0.1 },
-  { left: "31%", top: "94%", size: 1, delay: 1.2 },
-  { left: "46%", top: "46%", size: 2, delay: 0.7 },
-  { left: "57%", top: "32%", size: 1, delay: 1.6 },
-  { left: "66%", top: "69%", size: 2, delay: 0.3 },
-  { left: "77%", top: "93%", size: 1, delay: 2 },
-  { left: "87%", top: "36%", size: 2, delay: 1.1 },
-  { left: "92%", top: "64%", size: 1, delay: 0.6 },
+const galleryPictures = [
+  {
+    src: "/images/me1.jpeg",
+    alt: "Mariah Villasan portrait",
+  },
+  {
+    src: "/images/me2.jpeg",
+    alt: "Mariah Villasan gallery picture 2",
+  },
+  {
+    src: "/images/me3.jpeg",
+    alt: "Mariah Villasan gallery picture 3",
+  },
+  {
+    src: "/p2.jpg",
+    alt: "Mariah Villasan gallery picture 4",
+  },
 ];
 
-/* =========================================================
-   LEFT CONTENT ANIMATION
-========================================================= */
+const interests = [
+  "Frontend Development",
+  "UI/UX Design",
+  "Figma",
+  "Responsive Websites",
+];
 
-const leftContainerAnimation = {
-  hidden: {
-    opacity: 0,
-    x: -100,
-  },
-
-  visible: {
-    opacity: 1,
-    x: 0,
-
-    transition: {
-      duration: 0.85,
-      ease: "easeOut" as const,
-      staggerChildren: 0.12,
-      delayChildren: 0.2,
-    },
-  },
-};
-
-const leftItemAnimation = {
-  hidden: {
-    opacity: 0,
-    x: -45,
-  },
-
-  visible: {
-    opacity: 1,
-    x: 0,
-
-    transition: {
-      duration: 0.6,
-      ease: "easeOut" as const,
-    },
-  },
-};
-
-/* =========================================================
-   ABOUT COMPONENT
-========================================================= */
+const stars = Array.from({ length: 32 }, (_, index) => ({
+  id: index,
+  left: `${(index * 37.7) % 100}%`,
+  top: `${(index * 23.3) % 100}%`,
+  size: index % 5 === 0 ? 3 : index % 2 === 0 ? 2 : 1,
+  delay: (index * 0.17) % 3,
+}));
 
 export default function About() {
+  const [galleryOpen, setGalleryOpen] = useState(false);
+  const [selectedPicture, setSelectedPicture] = useState(0);
+
+  const openGallery = (index: number) => {
+    setSelectedPicture(index);
+    setGalleryOpen(true);
+  };
+
+  const closeGallery = () => {
+    setGalleryOpen(false);
+  };
+
+  const showPreviousPicture = () => {
+    setSelectedPicture((current) =>
+      current === 0 ? galleryPictures.length - 1 : current - 1
+    );
+  };
+
+  const showNextPicture = () => {
+    setSelectedPicture((current) =>
+      current === galleryPictures.length - 1 ? 0 : current + 1
+    );
+  };
+
+  /* Keyboard controls and page scrolling */
+
+  useEffect(() => {
+    if (!galleryOpen) {
+      document.body.style.overflow = "";
+      return;
+    }
+
+    document.body.style.overflow = "hidden";
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setGalleryOpen(false);
+      }
+
+      if (event.key === "ArrowLeft") {
+        setSelectedPicture((current) =>
+          current === 0 ? galleryPictures.length - 1 : current - 1
+        );
+      }
+
+      if (event.key === "ArrowRight") {
+        setSelectedPicture((current) =>
+          current === galleryPictures.length - 1 ? 0 : current + 1
+        );
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.body.style.overflow = "";
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [galleryOpen]);
+
   return (
-    <section
-      id="about"
-      className="
-        relative
-        isolate
-        flex
-        min-h-screen
-        items-center
-        overflow-hidden
-        bg-transparent
-        py-24
-      "
-    >
-      {/* ===================================================
-          SPACE BACKGROUND
-      =================================================== */}
-
-      <div
-        aria-hidden="true"
-        className="
-          pointer-events-none
-          absolute
-          inset-0
-          -z-30
-          overflow-hidden
-        "
+    <>
+      <section
+        id="about"
+        className="relative isolate min-h-screen overflow-hidden bg-transparent px-4 py-24 sm:px-6 lg:px-8"
       >
-        {/* Main galaxy colors */}
+        {/* Background effects */}
 
-        <div
-          className="
-            absolute
-            inset-0
-            bg-transparent
-          "
-        />
-
-        {/* Animated pink galaxy */}
-
-        <motion.div
-          animate={{
-            x: [0, 80, 0],
-            y: [0, -40, 0],
-            scale: [1, 1.2, 1],
-          }}
-          transition={{
-            duration: 16,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-          className="
-            absolute
-            -left-40
-            top-10
-            h-[520px]
-            w-[520px]
-            rounded-full
-            bg-pink-400/20
-            blur-[130px]
-            dark:bg-pink-600/15
-          "
-        />
-
-        {/* Animated violet galaxy */}
-
-        <motion.div
-          animate={{
-            x: [0, -70, 0],
-            y: [0, 65, 0],
-            scale: [1.2, 1, 1.2],
-          }}
-          transition={{
-            duration: 19,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-          className="
-            absolute
-            -right-44
-            top-[20%]
-            h-[560px]
-            w-[560px]
-            rounded-full
-            bg-violet-400/20
-            blur-[145px]
-            dark:bg-violet-600/15
-          "
-        />
-
-        {/* Animated blue galaxy */}
-
-        <motion.div
-          animate={{
-            x: [-30, 40, -30],
-            y: [20, -30, 20],
-            opacity: [0.15, 0.3, 0.15],
-          }}
-          transition={{
-            duration: 17,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-          className="
-            absolute
-            bottom-[-260px]
-            left-[30%]
-            h-[600px]
-            w-[600px]
-            rounded-full
-            bg-blue-400/20
-            blur-[150px]
-            dark:bg-blue-600/10
-          "
-        />
-
-        {/* Stars */}
-
-        {stars.map((star, index) => (
-          <motion.span
-            key={index}
-            initial={{
-              opacity: 0.25,
-              scale: 0.8,
-            }}
+        <div className="pointer-events-none absolute inset-0 -z-20">
+          <motion.div
             animate={{
-              opacity: [0.2, 1, 0.2],
-              scale: [0.8, 1.5, 0.8],
+              x: [0, 80, 0],
+              y: [0, -40, 0],
+              scale: [1, 1.2, 1],
             }}
             transition={{
-              duration: 2.2 + (index % 4),
+              duration: 18,
               repeat: Infinity,
-              delay: star.delay,
               ease: "easeInOut",
             }}
-            style={{
-              left: star.left,
-              top: star.top,
-              width: star.size,
-              height: star.size,
-            }}
-            className="
-              absolute
-              rounded-full
-              bg-pink-500
-              shadow-[0_0_8px_rgba(236,72,153,0.9)]
-              dark:bg-white
-              dark:shadow-[0_0_8px_rgba(255,255,255,0.9)]
-            "
+            className="absolute -left-48 top-0 h-[520px] w-[520px] rounded-full bg-pink-500/15 blur-[140px]"
           />
-        ))}
-
-        {/* Shooting star one */}
-
-        <motion.div
-          initial={{
-            x: "-20vw",
-            y: "-10vh",
-            opacity: 0,
-          }}
-          animate={{
-            x: "120vw",
-            y: "80vh",
-            opacity: [0, 1, 1, 0],
-          }}
-          transition={{
-            duration: 3.5,
-            repeat: Infinity,
-            repeatDelay: 7,
-            ease: "easeInOut",
-          }}
-          className="
-            absolute
-            left-0
-            top-0
-            h-[2px]
-            w-28
-            rotate-[32deg]
-            rounded-full
-            bg-gradient-to-r
-            from-transparent
-            via-pink-400
-            to-white
-            shadow-[0_0_10px_rgba(244,114,182,0.8)]
-          "
-        />
-
-        {/* Shooting star two */}
-
-        <motion.div
-          initial={{
-            x: "10vw",
-            y: "-20vh",
-            opacity: 0,
-          }}
-          animate={{
-            x: "110vw",
-            y: "70vh",
-            opacity: [0, 1, 1, 0],
-          }}
-          transition={{
-            duration: 4,
-            repeat: Infinity,
-            repeatDelay: 11,
-            delay: 4,
-            ease: "easeInOut",
-          }}
-          className="
-            absolute
-            left-0
-            top-0
-            h-px
-            w-20
-            rotate-[32deg]
-            rounded-full
-            bg-gradient-to-r
-            from-transparent
-            via-violet-400
-            to-white
-          "
-        />
-      </div>
-
-      {/* ===================================================
-          MAIN PAGE WIDTH
-      =================================================== */}
-
-      <div
-        className="
-          section-wrap
-          relative
-          z-10
-          w-full
-        "
-      >
-        {/* =================================================
-            MAIN ABOUT CARD
-        ================================================= */}
-
-        <motion.div
-          initial={{
-            opacity: 0,
-            y: 40,
-            scale: 0.98,
-          }}
-          whileInView={{
-            opacity: 1,
-            y: 0,
-            scale: 1,
-          }}
-          viewport={{
-            once: true,
-            amount: 0.12,
-          }}
-          transition={{
-            duration: 0.75,
-            ease: "easeOut",
-          }}
-          className="
-            relative
-            overflow-hidden
-            rounded-[2rem]
-
-            border
-            border-pink-300/40
-
-            bg-white/65
-
-            px-6
-            py-10
-
-            shadow-[0_30px_100px_rgba(120,40,100,0.18)]
-
-            backdrop-blur-2xl
-
-            sm:px-9
-
-            lg:px-12
-            lg:py-12
-
-            dark:border-pink-300/10
-            dark:bg-[#160a10]/85
-            dark:shadow-[0_30px_100px_rgba(0,0,0,0.55)]
-          "
-        >
-          {/* Inner border */}
-
-          <div
-            className="
-              pointer-events-none
-              absolute
-              inset-[1px]
-              rounded-[calc(2rem-1px)]
-              border
-              border-white/70
-              dark:border-white/[0.04]
-            "
-          />
-
-          {/* Card glow */}
 
           <motion.div
             animate={{
-              opacity: [0.12, 0.28, 0.12],
-              scale: [1, 1.15, 1],
+              x: [0, -70, 0],
+              y: [0, 60, 0],
+              scale: [1.1, 0.95, 1.1],
             }}
             transition={{
-              duration: 7,
+              duration: 20,
               repeat: Infinity,
               ease: "easeInOut",
             }}
-            className="
-              pointer-events-none
-              absolute
-              -bottom-32
-              left-1/3
-              h-72
-              w-72
-              rounded-full
-              bg-pink-500
-              blur-[120px]
-            "
+            className="absolute -right-48 top-[20%] h-[560px] w-[560px] rounded-full bg-violet-500/15 blur-[150px]"
           />
 
-          {/* =================================================
-              TWO-COLUMN LAYOUT
+          <div className="absolute bottom-[-240px] left-[25%] h-[600px] w-[600px] rounded-full bg-blue-500/10 blur-[160px]" />
 
-              Text remains on the left.
-              Image remains on the right.
-          ================================================= */}
-
-          <div
-            className="
-              relative
-              z-10
-              grid
-              items-center
-              gap-14
-
-              lg:grid-cols-[1fr_.9fr]
-              lg:gap-12
-
-              xl:gap-20
-            "
-          >
-            {/* =================================================
-                LEFT TEXT SECTION
-            ================================================= */}
-
-            <motion.div
-              variants={leftContainerAnimation}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{
-                once: true,
-                amount: 0.15,
+          {stars.map((star) => (
+            <motion.span
+              key={star.id}
+              animate={{
+                opacity: [0.2, 1, 0.2],
+                scale: [0.8, 1.4, 0.8],
               }}
-              className="
-                order-1
-                w-full
-              "
-            >
-              {/* ===============================================
-                  MAIN TITLE
-              =============================================== */}
-
-              <motion.h2
-                variants={leftItemAnimation}
-                className="
-                  max-w-xl
-
-                  font-serif
-                  text-5xl
-                  font-bold
-                  italic
-                  leading-[0.88]
-                  tracking-[-0.045em]
-                  text-pink-500
-
-                  sm:text-6xl
-
-                  lg:text-7xl
-
-                  xl:text-[5.3rem]
-
-                  dark:text-pink-400
-                "
-              >
-                <motion.span
-                  animate={{
-                    textShadow: [
-                      "0 0 0 rgba(236,72,153,0)",
-                      "0 0 24px rgba(236,72,153,0.35)",
-                      "0 0 0 rgba(236,72,153,0)",
-                    ],
-                  }}
-                  transition={{
-                    duration: 4,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                  }}
-                >
-                  ABOUT ME
-                </motion.span>
-              </motion.h2>
-
-              {/* ===============================================
-                  DESCRIPTION
-              =============================================== */}
-
-              <motion.p
-                variants={leftItemAnimation}
-                className="
-                  mt-7
-                  max-w-xl
-
-                  text-sm
-                  leading-7
-                  text-zinc-700
-
-                  sm:text-base
-                  sm:leading-8
-
-                  dark:text-pink-50/75
-                "
-              >
-                Hi, I&apos;m{" "}
-
-                <span
-                  className="
-                    font-bold
-                    text-zinc-950
-                    dark:text-white
-                  "
-                >
-                  Mariah Villasan
-                </span>
-                , a web designer with a genuine passion for
-                crafting clean and intuitive digital experiences.
-                I enjoy turning ideas into interfaces that feel
-                effortless to use while remaining visually
-                beautiful and memorable.
-              </motion.p>
-
-              <motion.p
-                variants={leftItemAnimation}
-                className="
-                  mt-4
-                  max-w-xl
-
-                  text-sm
-                  leading-7
-                  text-zinc-700
-
-                  sm:text-base
-                  sm:leading-8
-
-                  dark:text-pink-50/75
-                "
-              >
-                I&apos;m always exploring new design trends,
-                improving my skills with modern tools, and pushing
-                myself to grow as a designer. Every project is a
-                chance to learn something new, and I&apos;m always
-                excited to take on creative and challenging work.
-              </motion.p>
-
-              <motion.h3
-                variants={leftItemAnimation}
-                className="
-                  mt-8
-
-                  font-serif
-                  text-3xl
-                  font-bold
-                  italic
-                  text-pink-500
-
-                  dark:text-pink-400
-                "
-              >
-                Skills
-              </motion.h3>
-
-              {/* ===============================================
-                  SKILLS
-              =============================================== */}
-
-              <motion.div
-                variants={leftItemAnimation}
-                className="
-                  mt-6
-                  flex
-                  max-w-xl
-                  flex-wrap
-                  gap-2
-                "
-              >
-                {skills.map((skill, index) => (
-                  <motion.span
-                    key={skill}
-                    initial={{
-                      opacity: 0,
-                      x: -25,
-                      scale: 0.9,
-                    }}
-                    whileInView={{
-                      opacity: 1,
-                      x: 0,
-                      scale: 1,
-                    }}
-                    viewport={{
-                      once: true,
-                    }}
-                    transition={{
-                      duration: 0.45,
-                      delay: 0.55 + index * 0.09,
-                    }}
-                    whileHover={{
-                      y: -5,
-                      scale: 1.05,
-                    }}
-                    whileTap={{
-                      scale: 0.95,
-                    }}
-                    className="
-                      cursor-default
-                      rounded-full
-
-                      border
-                      border-pink-300/60
-
-                      bg-white/50
-
-                      px-4
-                      py-2
-
-                      text-xs
-                      font-semibold
-                      text-zinc-700
-
-                      shadow-sm
-                      backdrop-blur-md
-
-                      transition-colors
-                      duration-300
-
-                      hover:border-pink-500
-                      hover:bg-pink-100/70
-                      hover:text-pink-600
-
-                      dark:border-white/10
-                      dark:bg-white/[0.025]
-                      dark:text-pink-50/80
-
-                      dark:hover:border-pink-400/50
-                      dark:hover:bg-pink-500/10
-                      dark:hover:text-pink-300
-                    "
-                  >
-                    {skill}
-                  </motion.span>
-                ))}
-              </motion.div>
-
-              {/* ===============================================
-                  INFORMATION CARDS
-              =============================================== */}
-
-              <motion.div
-                variants={leftItemAnimation}
-                className="
-                  mt-7
-                  grid
-                  max-w-xl
-                  gap-4
-
-                  sm:grid-cols-2
-                "
-              >
-                {/* Currently card */}
-
-                <motion.div
-                  whileHover={{
-                    y: -7,
-                    scale: 1.02,
-                  }}
-                  transition={{
-                    duration: 0.25,
-                  }}
-                  className="
-                    group
-                    relative
-                    overflow-hidden
-
-                    rounded-2xl
-
-                    border
-                    border-pink-300/40
-
-                    bg-white/50
-
-                    p-5
-
-                    shadow-sm
-                    backdrop-blur-xl
-
-                    dark:border-white/10
-                    dark:bg-white/[0.025]
-                  "
-                >
-                  <motion.div
-                    animate={{
-                      scale: [1, 1.25, 1],
-                      opacity: [0.18, 0.35, 0.18],
-                    }}
-                    transition={{
-                      duration: 4,
-                      repeat: Infinity,
-                      ease: "easeInOut",
-                    }}
-                    className="
-                      absolute
-                      -bottom-8
-                      -right-7
-                      h-16
-                      w-16
-                      rounded-full
-                      bg-pink-500
-                    "
-                  />
-
-                  <p
-                    className="
-                      relative
-                      z-10
-
-                      text-[10px]
-                      font-bold
-                      uppercase
-                      tracking-[0.2em]
-                      text-pink-500
-
-                      dark:text-pink-400
-                    "
-                  >
-                    Currently
-                  </p>
-
-                  <p
-                    className="
-                      relative
-                      z-10
-
-                      mt-3
-
-                      text-sm
-                      font-semibold
-                      leading-6
-                      text-zinc-900
-
-                      dark:text-pink-50
-                    "
-                  >
-                    {profile.education ||
-                      "BS Information Technology Student"}
-                  </p>
-                </motion.div>
-
-                {/* Focus card */}
-
-                <motion.div
-                  whileHover={{
-                    y: -7,
-                    scale: 1.02,
-                  }}
-                  transition={{
-                    duration: 0.25,
-                  }}
-                  className="
-                    group
-                    relative
-                    overflow-hidden
-
-                    rounded-2xl
-
-                    border
-                    border-pink-300/40
-
-                    bg-white/50
-
-                    p-5
-
-                    shadow-sm
-                    backdrop-blur-xl
-
-                    dark:border-white/10
-                    dark:bg-white/[0.025]
-                  "
-                >
-                  <motion.div
-                    animate={{
-                      scale: [1.2, 1, 1.2],
-                      opacity: [0.35, 0.18, 0.35],
-                    }}
-                    transition={{
-                      duration: 4.5,
-                      repeat: Infinity,
-                      ease: "easeInOut",
-                    }}
-                    className="
-                      absolute
-                      -bottom-8
-                      -right-7
-                      h-16
-                      w-16
-                      rounded-full
-                      bg-fuchsia-500
-                    "
-                  />
-
-                  <p
-                    className="
-                      relative
-                      z-10
-
-                      text-[10px]
-                      font-bold
-                      uppercase
-                      tracking-[0.2em]
-                      text-pink-500
-
-                      dark:text-pink-400
-                    "
-                  >
-                    Focus
-                  </p>
-
-                  <p
-                    className="
-                      relative
-                      z-10
-
-                      mt-3
-
-                      text-sm
-                      font-semibold
-                      leading-6
-                      text-zinc-900
-
-                      dark:text-pink-50
-                    "
-                  >
-                    Web Systems & meaningful interfaces
-                  </p>
-                </motion.div>
-              </motion.div>
-
-              {/* ===============================================
-                  QUOTE
-              =============================================== */}
-
-              <motion.div
-                variants={leftItemAnimation}
-                whileHover={{
-                  x: 6,
-                }}
-                className="
-                  mt-5
-                  flex
-                  max-w-xl
-                  items-start
-                  gap-4
-
-                  rounded-r-2xl
-
-                  border-l-2
-                  border-pink-500
-
-                  bg-pink-100/70
-
-                  px-5
-                  py-4
-
-                  shadow-sm
-                  backdrop-blur-md
-
-                  dark:bg-pink-950/50
-                "
-              >
-                <motion.span
-                  animate={{
-                    y: [0, -5, 0],
-                  }}
-                  transition={{
-                    duration: 2,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                  }}
-                  className="
-                    font-serif
-                    text-3xl
-                    font-bold
-                    leading-none
-                    text-pink-500
-                  "
-                >
-                  “
-                </motion.span>
-
-                <p
-                  className="
-                    pt-1
-
-                    text-xs
-                    font-semibold
-                    leading-5
-                    text-zinc-800
-
-                    sm:text-sm
-
-                    dark:text-pink-50
-                  "
-                >
-                  My goal is simple: create designs that people
-                  enjoy using and remember.
-                </p>
-              </motion.div>
-
-              {/* ===============================================
-                  SIGNATURE
-              =============================================== */}
-
-              <motion.p
-                variants={leftItemAnimation}
-                whileHover={{
-                  x: 7,
-                  scale: 1.04,
-                }}
-                className="
-                  mt-5
-                  w-fit
-
-                  font-serif
-                  text-2xl
-                  font-bold
-                  italic
-                  text-pink-500
-
-                  dark:text-pink-400
-                "
-              >
-                Mariah.
-              </motion.p>
-            </motion.div>
-
-            {/* =================================================
-                RIGHT PICTURE SECTION
-
-                This section enters from the right side.
-            ================================================= */}
-
-            <motion.div
+              transition={{
+                duration: 2.5 + (star.id % 3),
+                repeat: Infinity,
+                delay: star.delay,
+                ease: "easeInOut",
+              }}
+              style={{
+                left: star.left,
+                top: star.top,
+                width: star.size,
+                height: star.size,
+              }}
+              className="absolute rounded-full bg-pink-300 shadow-[0_0_8px_rgba(244,114,182,0.9)] dark:bg-white"
+            />
+          ))}
+        </div>
+
+        <div className="mx-auto max-w-7xl">
+          {/* Heading */}
+
+          <motion.div
+            initial={{
+              opacity: 0,
+              y: 25,
+            }}
+            whileInView={{
+              opacity: 1,
+              y: 0,
+            }}
+            viewport={{
+              once: true,
+              amount: 0.3,
+            }}
+            transition={{
+              duration: 0.6,
+            }}
+            className="mx-auto mb-12 max-w-3xl text-center"
+          >
+            <div className="mx-auto inline-flex items-center gap-2 rounded-full border border-pink-300/30 bg-pink-500/5 px-4 py-2 backdrop-blur-xl dark:border-pink-400/15">
+              <Sparkles size={14} className="text-pink-500" />
+
+              <span className="font-mono text-xs uppercase tracking-[0.28em] text-pink-600 dark:text-pink-300">
+                02 / About Me
+              </span>
+            </div>
+
+            <h2 className="mt-5 text-4xl font-black tracking-[-0.05em] text-zinc-900 sm:text-5xl lg:text-6xl dark:text-white">
+              Creative mind,{" "}
+              <span className="bg-gradient-to-r from-pink-500 via-fuchsia-500 to-violet-500 bg-clip-text text-transparent">
+                growing developer.
+              </span>
+            </h2>
+
+            <p className="mx-auto mt-5 max-w-2xl text-sm leading-7 text-zinc-600 sm:text-base dark:text-zinc-400">
+              I enjoy turning ideas into clean, creative, and user-friendly
+              website designs while continuing to improve my development
+              skills.
+            </p>
+          </motion.div>
+
+          {/* Main grid */}
+
+          <div className="grid gap-5 lg:grid-cols-12">
+            {/* Information */}
+
+            <motion.article
               initial={{
                 opacity: 0,
-                x: 140,
-                scale: 0.9,
+                x: -40,
               }}
               whileInView={{
                 opacity: 1,
                 x: 0,
-                scale: 1,
               }}
               viewport={{
                 once: true,
-                amount: 0.15,
+                amount: 0.2,
               }}
               transition={{
-                duration: 1,
-                delay: 0.2,
-                ease: [0.16, 1, 0.3, 1],
+                duration: 0.65,
               }}
-              className="
-                order-2
-                relative
-                mx-auto
-                w-full
-                max-w-[430px]
-                pb-8
-                pt-10
-              "
+              className="relative overflow-hidden rounded-[2rem] border border-zinc-200/70 bg-white/60 p-7 shadow-xl shadow-black/5 backdrop-blur-xl sm:p-9 lg:col-span-7 dark:border-white/10 dark:bg-white/[0.04]"
             >
-              {/* ===============================================
-                  ROTATING DECORATION
-              =============================================== */}
+              <div className="pointer-events-none absolute -right-20 -top-20 h-56 w-56 rounded-full bg-pink-500/10 blur-3xl" />
 
-              <motion.div
-                animate={{
-                  rotate: 360,
-                }}
-                transition={{
-                  duration: 18,
-                  repeat: Infinity,
-                  ease: "linear",
-                }}
-                className="
-                  absolute
-                  -right-2
-                  top-0
+              <div className="relative z-10">
+                <p className="font-mono text-xs uppercase tracking-[0.25em] text-pink-500">
+                  Hello, I&apos;m
+                </p>
 
-                  h-28
-                  w-28
+                <h3 className="mt-3 text-4xl font-black tracking-tight text-zinc-900 sm:text-5xl dark:text-white">
+                  {profile.name}
+                </h3>
 
-                  rounded-full
+                <p className="mt-3 text-lg font-semibold text-pink-600 dark:text-pink-300">
+                  {profile.role}
+                </p>
 
-                  border
-                  border-dashed
-                  border-pink-500/70
-                "
-              >
-                <motion.span
-                  animate={{
-                    scale: [1, 1.5, 1],
-                  }}
-                  transition={{
-                    duration: 2,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                  }}
-                  className="
-                    absolute
-                    bottom-1
-                    right-4
+                <p className="mt-7 max-w-2xl text-sm leading-8 text-zinc-600 sm:text-base dark:text-zinc-400">
+                  {profile.bio}
+                </p>
 
-                    h-2.5
-                    w-2.5
+                <p className="mt-5 max-w-2xl text-sm leading-8 text-zinc-600 sm:text-base dark:text-zinc-400">
+                  I am still learning React, Tailwind CSS, databases, and API
+                  integration. I enjoy practicing through school activities and
+                  personal projects because every project helps me become more
+                  confident.
+                </p>
 
-                    rotate-45
+                <div className="mt-8 flex flex-wrap gap-2">
+                  {skills.map((skill) => (
+                    <motion.span
+                      key={skill}
+                      whileHover={{
+                        y: -3,
+                        scale: 1.04,
+                      }}
+                      className="rounded-full border border-pink-300/30 bg-pink-500/5 px-4 py-2 text-xs font-medium text-zinc-700 transition-colors hover:border-pink-400/50 hover:text-pink-600 dark:border-pink-400/15 dark:bg-white/5 dark:text-zinc-300"
+                    >
+                      {skill}
+                    </motion.span>
+                  ))}
+                </div>
+              </div>
+            </motion.article>
 
-                    bg-pink-500
+            {/* Main photo */}
 
-                    shadow-[0_0_14px_rgba(236,72,153,0.9)]
-                  "
-                />
-              </motion.div>
-
-              {/* ===============================================
-                  BACK PHOTO CARD
-              =============================================== */}
-
-              <motion.div
-                animate={{
-                  rotate: [3, 5, 3],
-                  y: [0, -5, 0],
-                }}
-                transition={{
-                  duration: 5,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-                className="
-                  absolute
-                  inset-x-6
-                  bottom-2
-                  top-14
-
-                  rounded-[2rem]
-
-                  border
-                  border-pink-300/30
-
-                  bg-pink-100/20
-
-                  dark:border-white/10
-                  dark:bg-white/[0.02]
-                "
+            <motion.button
+              type="button"
+              onClick={() => openGallery(0)}
+              initial={{
+                opacity: 0,
+                x: 40,
+              }}
+              whileInView={{
+                opacity: 1,
+                x: 0,
+              }}
+              viewport={{
+                once: true,
+                amount: 0.2,
+              }}
+              whileHover={{
+                y: -8,
+              }}
+              transition={{
+                duration: 0.65,
+              }}
+              className="group relative min-h-[470px] overflow-hidden rounded-[2rem] border border-pink-300/30 bg-zinc-900 text-left shadow-[0_30px_80px_rgba(236,72,153,0.16)] lg:col-span-5"
+            >
+              <Image
+                src={galleryPictures[0].src}
+                alt={galleryPictures[0].alt}
+                fill
+                priority
+                className="object-cover transition-transform duration-700 group-hover:scale-105"
+                sizes="(max-width: 1024px) 100vw, 42vw"
               />
 
-              {/* ===============================================
-                  MAIN PHOTO CARD
-              =============================================== */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/10 to-black/10" />
 
-              <motion.div
-                animate={{
-                  y: [0, -8, 0],
-                }}
-                transition={{
-                  duration: 4.5,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-                whileHover={{
-                  scale: 1.025,
-                  rotate: -1,
-                }}
-                className="
-                  group
-                  relative
-                  overflow-hidden
+              <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-8">
+                <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-black/30 px-4 py-2 text-xs font-medium text-white backdrop-blur-xl">
+                  <ExternalLink size={14} />
+                  Click to open gallery
+                </div>
 
-                  rounded-[2rem]
+                <p className="mt-4 text-2xl font-black text-white">
+                  My moments
+                </p>
 
-                  border
-                  border-pink-300/40
+                <p className="mt-2 text-sm text-white/70">
+                  View more pictures and learn more about me.
+                </p>
+              </div>
+            </motion.button>
 
-                  bg-white/30
+            {/* Education */}
 
-                  p-2
+            <motion.article
+              initial={{
+                opacity: 0,
+                y: 35,
+              }}
+              whileInView={{
+                opacity: 1,
+                y: 0,
+              }}
+              viewport={{
+                once: true,
+              }}
+              whileHover={{
+                y: -6,
+              }}
+              className="rounded-[1.75rem] border border-zinc-200/70 bg-white/60 p-6 shadow-lg backdrop-blur-xl lg:col-span-4 dark:border-white/10 dark:bg-white/[0.04]"
+            >
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-pink-500 text-white shadow-lg shadow-pink-500/25">
+                <GraduationCap />
+              </div>
 
-                  shadow-[0_25px_65px_rgba(190,24,93,0.25)]
+              <p className="mt-5 font-mono text-xs uppercase tracking-[0.2em] text-pink-500">
+                Education
+              </p>
 
-                  backdrop-blur-xl
+              <h3 className="mt-3 text-xl font-bold text-zinc-900 dark:text-white">
+                {profile.education}
+              </h3>
 
-                  dark:border-white/10
-                  dark:bg-white/[0.025]
-                "
+              <p className="mt-3 text-sm leading-6 text-zinc-600 dark:text-zinc-400">
+                BSIT student focused on web systems, frontend development, and
+                user interface design.
+              </p>
+            </motion.article>
+
+            {/* Focus */}
+
+            <motion.article
+              initial={{
+                opacity: 0,
+                y: 35,
+              }}
+              whileInView={{
+                opacity: 1,
+                y: 0,
+              }}
+              viewport={{
+                once: true,
+              }}
+              whileHover={{
+                y: -6,
+              }}
+              className="rounded-[1.75rem] border border-zinc-200/70 bg-white/60 p-6 shadow-lg backdrop-blur-xl lg:col-span-4 dark:border-white/10 dark:bg-white/[0.04]"
+            >
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-violet-500 text-white shadow-lg shadow-violet-500/25">
+                <Palette />
+              </div>
+
+              <p className="mt-5 font-mono text-xs uppercase tracking-[0.2em] text-violet-500">
+                Main Focus
+              </p>
+
+              <div className="mt-4 space-y-3">
+                {interests.map((interest) => (
+                  <div
+                    key={interest}
+                    className="flex items-center gap-3 text-sm font-medium text-zinc-700 dark:text-zinc-300"
+                  >
+                    <span className="h-2 w-2 rounded-full bg-violet-500" />
+                    {interest}
+                  </div>
+                ))}
+              </div>
+            </motion.article>
+
+            {/* Personality */}
+
+            <motion.article
+              initial={{
+                opacity: 0,
+                y: 35,
+              }}
+              whileInView={{
+                opacity: 1,
+                y: 0,
+              }}
+              viewport={{
+                once: true,
+              }}
+              whileHover={{
+                y: -6,
+              }}
+              className="rounded-[1.75rem] border border-zinc-200/70 bg-gradient-to-br from-pink-500 to-violet-600 p-6 text-white shadow-xl shadow-pink-500/20 lg:col-span-4"
+            >
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/15 backdrop-blur-xl">
+                <Heart />
+              </div>
+
+              <p className="mt-5 font-mono text-xs uppercase tracking-[0.2em] text-white/70">
+                Beyond Coding
+              </p>
+
+              <h3 className="mt-3 text-xl font-bold">
+                Extrovert and creative
+              </h3>
+
+              <p className="mt-3 text-sm leading-6 text-white/80">
+                I enjoy playing mobile games, watching movies, eating good
+                food, and scrolling through TikTok, Instagram, and Facebook.
+              </p>
+            </motion.article>
+
+            {/* Learning status */}
+
+            <motion.article
+              initial={{
+                opacity: 0,
+                y: 35,
+              }}
+              whileInView={{
+                opacity: 1,
+                y: 0,
+              }}
+              viewport={{
+                once: true,
+              }}
+              className="overflow-hidden rounded-[1.75rem] border border-zinc-200/70 bg-white/60 p-6 shadow-lg backdrop-blur-xl lg:col-span-12 dark:border-white/10 dark:bg-white/[0.04]"
+            >
+              <div className="grid gap-6 sm:grid-cols-3">
+                <StatusItem
+                  icon={<Code2 size={19} />}
+                  title="Frontend"
+                  text="Improving React and Tailwind CSS"
+                />
+
+                <StatusItem
+                  icon={<Layers3 size={19} />}
+                  title="Design"
+                  text="Creating interfaces using Figma"
+                />
+
+                <StatusItem
+                  icon={<Sparkles size={19} />}
+                  title="Current Goal"
+                  text="Build clean and responsive projects"
+                />
+              </div>
+            </motion.article>
+          </div>
+        </div>
+      </section>
+
+      {/* Full-screen gallery */}
+
+      <AnimatePresence>
+        {galleryOpen && (
+          <motion.div
+            initial={{
+              opacity: 0,
+            }}
+            animate={{
+              opacity: 1,
+            }}
+            exit={{
+              opacity: 0,
+            }}
+            onClick={closeGallery}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Mariah's picture gallery"
+            className="fixed inset-0 z-[150] flex items-center justify-center bg-black/90 p-4 backdrop-blur-xl sm:p-8"
+          >
+            <motion.div
+              initial={{
+                opacity: 0,
+                scale: 0.9,
+                y: 40,
+              }}
+              animate={{
+                opacity: 1,
+                scale: 1,
+                y: 0,
+              }}
+              exit={{
+                opacity: 0,
+                scale: 0.94,
+                y: 20,
+              }}
+              transition={{
+                type: "spring",
+                stiffness: 180,
+                damping: 22,
+              }}
+              onClick={(event) => event.stopPropagation()}
+              className="relative w-full max-w-5xl"
+            >
+              {/* Close button */}
+
+              <button
+                type="button"
+                onClick={closeGallery}
+                className="absolute right-3 top-3 z-30 flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-black/50 text-white backdrop-blur-xl transition-all hover:rotate-90 hover:bg-pink-500"
+                aria-label="Close gallery"
               >
-                <div
-                  className="
-                    relative
-                    min-h-[460px]
-                    overflow-hidden
+                <X />
+              </button>
 
-                    rounded-[1.55rem]
+              {/* Current picture */}
 
-                    bg-gradient-to-b
-                    from-pink-100
-                    to-pink-200
-
-                    dark:from-[#2b111d]
-                    dark:to-[#170a10]
-                  "
-                >
-                  {/* ===========================================
-                      PICTURE
-                  =========================================== */}
-
-                  <img
-                    src="/p2.jpg"
-                    alt="Mariah Villasan"
-                    draggable={false}
-                    className="
-                      absolute
-                      inset-0
-
-                      h-full
-                      w-full
-
-                      select-none
-                      object-cover
-                      object-center
-
-                      transition-transform
-                      duration-700
-
-                      group-hover:scale-[1.04]
-                    "
-                  />
-
-                  {/* Dark bottom gradient */}
-
-                  <div
-                    className="
-                      pointer-events-none
-                      absolute
-                      inset-0
-
-                      bg-gradient-to-t
-                      from-[#170a10]/75
-                      via-transparent
-                      to-transparent
-                    "
-                  />
-
-                  {/* Animated photo shine */}
-
+              <div className="relative aspect-[16/10] w-full overflow-hidden rounded-[2rem] border border-white/10 bg-zinc-950 shadow-[0_40px_120px_rgba(0,0,0,0.6)]">
+                <AnimatePresence mode="wait">
                   <motion.div
-                    animate={{
-                      x: ["-180%", "250%"],
-                    }}
-                    transition={{
-                      duration: 2.8,
-                      repeat: Infinity,
-                      repeatDelay: 4,
-                      ease: "easeInOut",
-                    }}
-                    className="
-                      pointer-events-none
-
-                      absolute
-                      -top-20
-                      left-0
-
-                      h-[140%]
-                      w-24
-
-                      rotate-[18deg]
-
-                      bg-gradient-to-r
-                      from-transparent
-                      via-white/20
-                      to-transparent
-
-                      blur-lg
-                    "
-                  />
-
-                  {/* Photo border */}
-
-                  <div
-                    className="
-                      pointer-events-none
-                      absolute
-                      inset-0
-
-                      rounded-[1.55rem]
-
-                      border
-                      border-white/20
-                    "
-                  />
-
-                  {/* Age information */}
-
-                  <motion.div
+                    key={galleryPictures[selectedPicture].src}
                     initial={{
                       opacity: 0,
-                      x: -30,
+                      scale: 1.04,
                     }}
-                    whileInView={{
-                      opacity: 1,
-                      x: 0,
-                    }}
-                    viewport={{
-                      once: true,
-                    }}
-                    transition={{
-                      duration: 0.7,
-                      delay: 1,
-                    }}
-                    className="
-                      absolute
-                      bottom-5
-                      left-5
-                      text-white
-                    "
-                  >
-                    <motion.p
-                      animate={{
-                        textShadow: [
-                          "0 0 0 rgba(244,114,182,0)",
-                          "0 0 18px rgba(244,114,182,0.75)",
-                          "0 0 0 rgba(244,114,182,0)",
-                        ],
-                      }}
-                      transition={{
-                        duration: 3,
-                        repeat: Infinity,
-                      }}
-                      className="
-                        font-serif
-                        text-5xl
-                        font-bold
-                        italic
-                      "
-                    >
-                      22
-                    </motion.p>
-
-                    <p
-                      className="
-                        text-[9px]
-                        font-bold
-                        uppercase
-                        tracking-[0.22em]
-                      "
-                    >
-                      Years of curiosity
-                    </p>
-                  </motion.div>
-                </div>
-              </motion.div>
-
-              {/* ===============================================
-                  CREATIVE THINKER LABEL
-              =============================================== */}
-
-              <motion.div
-                initial={{
-                  opacity: 0,
-                  x: 80,
-                }}
-                whileInView={{
-                  opacity: 1,
-                  x: 0,
-                }}
-                viewport={{
-                  once: true,
-                }}
-                animate={{
-                  y: [0, -7, 0],
-                }}
-                transition={{
-                  opacity: {
-                    duration: 0.7,
-                    delay: 1,
-                  },
-
-                  x: {
-                    duration: 0.7,
-                    delay: 1,
-                  },
-
-                  y: {
-                    duration: 3.5,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                  },
-                }}
-                whileHover={{
-                  scale: 1.06,
-                }}
-                className="
-                  absolute
-                  -left-5
-                  top-20
-
-                  rounded-xl
-
-                  border
-                  border-pink-300/40
-
-                  bg-white/90
-
-                  px-4
-                  py-3
-
-                  shadow-xl
-                  backdrop-blur-xl
-
-                  dark:border-white/10
-                  dark:bg-[#1d0d14]/90
-                "
-              >
-                <p
-                  className="
-                    text-[10px]
-                    font-bold
-                    text-zinc-900
-                    dark:text-white
-                  "
-                >
-                  Creative thinker
-                </p>
-
-                <p
-                  className="
-                    mt-1
-                    text-[8px]
-                    font-bold
-                    uppercase
-                    tracking-[0.18em]
-                    text-pink-500
-                  "
-                >
-                  Ideas into visuals
-                </p>
-              </motion.div>
-
-              {/* ===============================================
-                  DETAIL FOCUSED LABEL
-              =============================================== */}
-
-              <motion.div
-                initial={{
-                  opacity: 0,
-                  x: 80,
-                }}
-                whileInView={{
-                  opacity: 1,
-                  x: 0,
-                }}
-                viewport={{
-                  once: true,
-                }}
-                animate={{
-                  y: [0, 8, 0],
-                }}
-                transition={{
-                  opacity: {
-                    duration: 0.7,
-                    delay: 1.15,
-                  },
-
-                  x: {
-                    duration: 0.7,
-                    delay: 1.15,
-                  },
-
-                  y: {
-                    duration: 4,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                  },
-                }}
-                whileHover={{
-                  scale: 1.06,
-                }}
-                className="
-                  absolute
-                  -right-5
-                  bottom-24
-
-                  rounded-xl
-
-                  border
-                  border-pink-300/40
-
-                  bg-white/90
-
-                  px-4
-                  py-3
-
-                  shadow-xl
-                  backdrop-blur-xl
-
-                  dark:border-white/10
-                  dark:bg-[#1d0d14]/90
-                "
-              >
-                <div className="flex items-center gap-1.5">
-                  <motion.div
                     animate={{
-                      rotate: [0, 20, -20, 0],
-                      scale: [1, 1.2, 1],
+                      opacity: 1,
+                      scale: 1,
+                    }}
+                    exit={{
+                      opacity: 0,
+                      scale: 0.97,
                     }}
                     transition={{
-                      duration: 2.5,
-                      repeat: Infinity,
-                      ease: "easeInOut",
+                      duration: 0.35,
                     }}
+                    className="absolute inset-0"
                   >
-                    <Sparkles
-                      className="
-                        h-3
-                        w-3
-                        text-pink-500
-                      "
+                    <Image
+                      src={galleryPictures[selectedPicture].src}
+                      alt={galleryPictures[selectedPicture].alt}
+                      fill
+                      className="object-contain"
+                      sizes="100vw"
                     />
                   </motion.div>
+                </AnimatePresence>
 
-                  <p
-                    className="
-                      text-[10px]
-                      font-bold
-                      text-zinc-900
-                      dark:text-white
-                    "
-                  >
-                    Detail focused
-                  </p>
-                </div>
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/20" />
 
-                <p
-                  className="
-                    mt-1
-                    text-[8px]
-                    font-bold
-                    uppercase
-                    tracking-[0.18em]
-                    text-pink-500
-                  "
+                {/* Previous */}
+
+                <button
+                  type="button"
+                  onClick={showPreviousPicture}
+                  className="absolute left-3 top-1/2 z-20 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/40 text-white backdrop-blur-xl transition-all hover:scale-110 hover:bg-pink-500 sm:left-5"
+                  aria-label="Previous picture"
                 >
-                  Made with care
-                </p>
-              </motion.div>
+                  <ChevronLeft />
+                </button>
+
+                {/* Next */}
+
+                <button
+                  type="button"
+                  onClick={showNextPicture}
+                  className="absolute right-3 top-1/2 z-20 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/40 text-white backdrop-blur-xl transition-all hover:scale-110 hover:bg-pink-500 sm:right-5"
+                  aria-label="Next picture"
+                >
+                  <ChevronRight />
+                </button>
+
+                {/* Counter */}
+
+                <div className="absolute bottom-5 left-1/2 z-20 -translate-x-1/2 rounded-full border border-white/20 bg-black/40 px-4 py-2 font-mono text-xs text-white backdrop-blur-xl">
+                  {String(selectedPicture + 1).padStart(2, "0")} /{" "}
+                  {String(galleryPictures.length).padStart(2, "0")}
+                </div>
+              </div>
+
+              {/* Thumbnails */}
+
+              <div className="mt-5 flex items-center justify-center gap-3 overflow-x-auto pb-2">
+                {galleryPictures.map((picture, index) => (
+                  <button
+                    key={picture.src}
+                    type="button"
+                    onClick={() => setSelectedPicture(index)}
+                    aria-label={`Open picture ${index + 1}`}
+                    className={`relative h-16 w-20 shrink-0 overflow-hidden rounded-xl border-2 transition-all sm:h-20 sm:w-28 ${
+                      selectedPicture === index
+                        ? "scale-105 border-pink-500 shadow-lg shadow-pink-500/25"
+                        : "border-white/10 opacity-60 hover:border-white/40 hover:opacity-100"
+                    }`}
+                  >
+                    <Image
+                      src={picture.src}
+                      alt={picture.alt}
+                      fill
+                      className="object-cover"
+                      sizes="112px"
+                    />
+                  </button>
+                ))}
+              </div>
             </motion.div>
-          </div>
-        </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
+  );
+}
+
+type StatusItemProps = {
+  icon: ReactNode;
+  title: string;
+  text: string;
+};
+
+function StatusItem({ icon, title, text }: StatusItemProps) {
+  return (
+    <div className="flex items-start gap-4 rounded-2xl border border-zinc-200/70 bg-white/40 p-4 dark:border-white/10 dark:bg-white/[0.03]">
+      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-pink-500 text-white shadow-lg shadow-pink-500/20">
+        {icon}
       </div>
-    </section>
+
+      <div>
+        <p className="text-sm font-bold text-zinc-900 dark:text-white">
+          {title}
+        </p>
+
+        <p className="mt-1 text-xs leading-5 text-zinc-500 dark:text-zinc-400">
+          {text}
+        </p>
+      </div>
+    </div>
   );
 }

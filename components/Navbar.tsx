@@ -18,8 +18,10 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [dark, setDark] = useState(true);
+  const [mounted, setMounted] = useState(false);
 
-  // Load the saved color theme.
+  /* Load saved theme. */
+
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme");
 
@@ -30,23 +32,30 @@ export default function Navbar() {
       document.documentElement.classList.add("dark");
       setDark(true);
     }
+
+    setMounted(true);
   }, []);
 
-  // Detect when the user scrolls.
+  /* Change navbar style when scrolling. */
+
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
     };
 
     handleScroll();
-    window.addEventListener("scroll", handleScroll);
+
+    window.addEventListener("scroll", handleScroll, {
+      passive: true,
+    });
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
 
-  // Close the mobile menu when the browser becomes risen.
+  /* Close mobile menu when screen becomes larger. */
+
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 768) {
@@ -60,6 +69,20 @@ export default function Navbar() {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
+
+  /* Prevent scrolling while mobile menu is open. */
+
+  useEffect(() => {
+    if (open) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [open]);
 
   const toggleTheme = () => {
     const nextDark = !dark;
@@ -79,6 +102,14 @@ export default function Navbar() {
     setOpen(false);
   };
 
+  const headerBackground = dark
+    ? scrolled
+      ? "rgba(3, 1, 6, 0.9)"
+      : "rgba(3, 1, 6, 0.58)"
+    : scrolled
+      ? "rgba(255, 255, 255, 0.9)"
+      : "rgba(255, 255, 255, 0.62)";
+
   return (
     <motion.header
       initial={{
@@ -88,54 +119,90 @@ export default function Navbar() {
       animate={{
         opacity: 1,
         y: 0,
-        backgroundColor: scrolled
-          ? dark
-            ? "rgba(5, 5, 7, 0.88)"
-            : "rgba(255, 255, 255, 0.88)"
-          : dark
-            ? "rgba(5, 5, 7, 0.25)"
-            : "rgba(179, 76, 139, 0.35)",
+        backgroundColor: headerBackground,
       }}
       transition={{
-        duration: 0.5,
-        ease: "easeOut",
+        opacity: {
+          duration: 0.5,
+        },
+        y: {
+          duration: 0.5,
+          ease: "easeOut",
+        },
+        backgroundColor: {
+          duration: 0.35,
+        },
       }}
-      className="
+      className={`
         fixed
         inset-x-0
         top-0
         z-50
         border-b
-        border-pink-400/10
         backdrop-blur-xl
-      "
+        transition-[border-color,box-shadow]
+        duration-300
+        ${
+          dark
+            ? "border-white/10"
+            : "border-pink-200/60"
+        }
+        ${
+          scrolled
+            ? dark
+              ? "shadow-[0_10px_40px_rgba(0,0,0,0.32)]"
+              : "shadow-[0_10px_35px_rgba(190,24,93,0.09)]"
+            : "shadow-none"
+        }
+      `}
     >
       <nav
         className="
-         reit relative
-          mx Kens Stylenade multiline eyeballingAndrea cant stand binegar.
+          relative
+          mx-auto
+          flex
+          h-16
+          w-[min(1180px,calc(100%-2rem))]
+          items-center
+          justify-between
         "
       >
+        {/* Portfolio logo */}
+
         <motion.a
           href="#home"
-          whileHover={{ x: 2 }}
-          transition={{ duration: 0.2 }}
+          onClick={closeMobileMenu}
+          whileHover={{
+            x: 2,
+          }}
+          whileTap={{
+            scale: 0.97,
+          }}
+          transition={{
+            duration: 0.2,
+          }}
           className="
-           ennials focus-ring
+            focus-ring
+            relative
+            z-10
             font-mono
             text-sm
             font-bold
             tracking-widest
-            text-pink-400
+            text-pink-600
             transition-all
             duration-200
-            hover:text-pink-300
-            hover:drop-shadow-[0_0_8px_rgba(244,114,182,.35)]
+            hover:text-pink-500
+            hover:drop-shadow-[0_0_8px_rgba(236,72,153,0.35)]
+            dark:text-pink-400
+            dark:hover:text-pink-300
           "
         >
           {profile.name.split(" ")[0]}
           <span className="text-zinc-900 dark:text-white">.</span>
         </motion.a>
+
+        {/* Desktop navigation */}
 
         <div
           className="
@@ -154,73 +221,117 @@ export default function Navbar() {
             <motion.a
               key={id}
               href={`#${id}`}
-              whileHover={{ y: -1 }}
-              transition={{ duration: 0.2 }}
+              whileHover={{
+                y: -2,
+              }}
+              whileTap={{
+                scale: 0.96,
+              }}
+              transition={{
+                duration: 0.2,
+              }}
               className="
                 group
+                focus-ring
                 relative
                 whitespace-nowrap
-                py-1
+                py-2
                 text-sm
-                text-zinc-600
+                font-medium
+                text-zinc-700
                 transition-colors
                 duration-200
-                hover:text-pink-500
-                focus-ring
+                hover:text-pink-600
                 dark:text-zinc-300
                 dark:hover:text-pink-300
               "
             >
               {label}
 
-              <motion.span
+              <span
                 className="
                   absolute
                   bottom-0
-                  left-0
+                  left-1/2
                   h-[2px]
-                  w-full
-                  origin-left
+                  w-0
+                  -translate-x-1/2
                   rounded-full
-                  bg-pink-400
+                  bg-pink-500
+                  transition-all
+                  duration-300
+                  group-hover:w-full
+                  dark:bg-pink-400
                 "
-                initial={{ scaleX: 0 }}
-                whileHover={{ scaleX: 1 }}
-                transition={{
-                  duration: 0.2,
-                  ease: "easeOut",
-                }}
               />
             </motion.a>
           ))}
         </div>
 
-        <div className="ml-auto flex items-center gap-3">
+        {/* Right-side buttons */}
+
+        <div
+          className="
+            relative
+            z-10
+            ml-auto
+            flex
+            items-center
+            gap-2
+          "
+        >
+          {/* Theme button */}
+
           <motion.button
             type="button"
             onClick={toggleTheme}
+            disabled={!mounted}
             aria-label={
-              dark ? "Switch to light mode" : "Switch to dark mode"
+              dark
+                ? "Switch to light mode"
+                : "Switch to dark mode"
             }
-            whileHover={{ scale: 1.08 }}
-            whileTap={{ scale: 0.92 }}
+            title={
+              dark
+                ? "Switch to light mode"
+                : "Switch to dark mode"
+            }
+            whileHover={{
+              scale: 1.08,
+              rotate: dark ? 8 : -8,
+            }}
+            whileTap={{
+              scale: 0.9,
+            }}
             className="
+              focus-ring
               flex
-              h-9
-              w-9
+              h-10
+              w-10
               items-center
               justify-center
               rounded-full
               border
-              border-pink-400/20
-              bg-pink-400/5
-              text-pink-400
+              border-pink-300/70
+              bg-white/50
+              text-pink-600
+              shadow-sm
               transition-all
               duration-200
-              hover:bg-pink-400/15
-              hover:text-pink-300
-              hover:shadow-[0_0_20px_rgba(236,72,153,.18)]
-              focus-ring
+              hover:border-pink-400
+              hover:bg-pink-100/70
+              hover:text-pink-700
+              hover:shadow-[0_0_20px_rgba(236,72,153,0.2)]
+              disabled:cursor-wait
+              disabled:opacity-60
+              dark:border-pink-400/25
+              dark:bg-pink-400/5
+              dark:text-pink-400
+              dark:shadow-none
+              dark:hover:border-pink-400/50
+              dark:hover:bg-pink-400/15
+              dark:hover:text-pink-300
+              dark:hover:shadow-[0_0_20px_rgba(236,72,153,0.2)]
             "
           >
             <AnimatePresence mode="wait" initial={false}>
@@ -241,39 +352,64 @@ export default function Navbar() {
                   rotate: 90,
                   scale: 0.5,
                 }}
-                transition={{ duration: 0.2 }}
+                transition={{
+                  duration: 0.2,
+                }}
               >
-                {dark ? <FiSun size={16} /> : <FiMoon size={16} />}
+                {dark ? (
+                  <FiSun size={17} />
+                ) : (
+                  <FiMoon size={17} />
+                )}
               </motion.span>
             </AnimatePresence>
           </motion.button>
 
+          {/* Mobile menu button */}
+
           <motion.button
             type="button"
             aria-label={
-              open ? "Close navigation menu" : "Open navigation menu"
+              open
+                ? "Close navigation menu"
+                : "Open navigation menu"
             }
             aria-expanded={open}
             aria-controls="mobile-navigation"
-            onClick={() => setOpen((currentOpen) => !currentOpen)}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.92 }}
+            onClick={() => {
+              setOpen((currentOpen) => !currentOpen);
+            }}
+            whileHover={{
+              scale: 1.06,
+            }}
+            whileTap={{
+              scale: 0.9,
+            }}
             className="
+              focus-ring
               flex
-              h-9
-              w-9
+              h-10
+              w-10
               items-center
               justify-center
               rounded-full
               border
-              border-pink-400/20
-              bg-pink-400/5
-              text-pink-400
+              border-pink-300/70
+              bg-white/50
+              text-pink-600
+              shadow-sm
               transition-all
               duration-200
-              hover:bg-pink-400/15
-              hover:text-pink-300
-              focus-ring
+              hover:border-pink-400
+              hover:bg-pink-100/70
+              hover:text-pink-700
+              dark:border-pink-400/25
+              dark:bg-pink-400/5
+              dark:text-pink-400
+              dark:shadow-none
+              dark:hover:border-pink-400/50
+              dark:hover:bg-pink-400/15
+              dark:hover:text-pink-300
               md:hidden
             "
           >
@@ -295,14 +431,22 @@ export default function Navbar() {
                   rotate: 90,
                   scale: 0.5,
                 }}
-                transition={{ duration: 0.2 }}
+                transition={{
+                  duration: 0.2,
+                }}
               >
-                {open ? <FiX size={18} /> : <FiMenu size={18} />}
+                {open ? (
+                  <FiX size={19} />
+                ) : (
+                  <FiMenu size={19} />
+                )}
               </motion.span>
             </AnimatePresence>
           </motion.button>
         </div>
       </nav>
+
+      {/* Mobile navigation */}
 
       <AnimatePresence>
         {open && (
@@ -327,7 +471,11 @@ export default function Navbar() {
             className="
               overflow-hidden
               border-t
-              border-pink-400/10
+              border-pink-200/60
+              bg-white/90
+              backdrop-blur-2xl
+              dark:border-white/10
+              dark:bg-[#050208]/90
               md:hidden
             "
           >
@@ -337,6 +485,7 @@ export default function Navbar() {
                 flex
                 w-[min(1180px,calc(100%-2rem))]
                 flex-col
+                gap-1
                 py-3
               "
             >
@@ -361,19 +510,26 @@ export default function Navbar() {
                     duration: 0.2,
                     delay: index * 0.04,
                   }}
-                  whileHover={{ x: 3 }}
+                  whileHover={{
+                    x: 4,
+                  }}
+                  whileTap={{
+                    scale: 0.98,
+                  }}
                   className="
+                    focus-ring
                     rounded-xl
                     px-4
                     py-3
                     text-sm
                     font-medium
-                    text-zinc-600
+                    text-zinc-700
                     transition-colors
-                    hover:bg-pink-400/10
-                    hover:text-pink-500
-                    focus-ring
+                    duration-200
+                    hover:bg-pink-100/80
+                    hover:text-pink-700
                     dark:text-zinc-300
+                    dark:hover:bg-pink-400/10
                     dark:hover:text-pink-300
                   "
                 >

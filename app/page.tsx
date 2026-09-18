@@ -6,10 +6,13 @@ import Projects from "@/components/Projects";
 import Experience from "@/components/Experience";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
+import ShootingStars from "@/components/ShootingStars";
 
 export default function Page() {
   return (
     <>
+      <ShootingStars />
+
       <Navbar />
 
       <main className="relative z-10">
