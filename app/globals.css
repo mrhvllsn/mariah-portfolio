@@ -2,10 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* =========================================================
-   THEME VARIABLES
-========================================================= */
-
+/* Theme colors */
 :root {
   color-scheme: light;
 
@@ -16,7 +13,7 @@
   --pink-light: #f9a8d4;
   --pink-dark: #be185d;
 
-  --glass-bg: rgba(255, 255, 255, 0.58);
+  --glass-bg: rgba(255, 255, 255, 0.68);
   --glass-border: rgba(236, 72, 153, 0.2);
   --grid-color: rgba(236, 72, 153, 0.07);
 }
@@ -27,15 +24,12 @@ html.dark {
   --background: #030106;
   --foreground: #fdf2f8;
 
-  --glass-bg: rgba(12, 5, 16, 0.62);
+  --glass-bg: rgba(12, 5, 16, 0.72);
   --glass-border: rgba(244, 114, 182, 0.2);
   --grid-color: rgba(255, 255, 255, 0.035);
 }
 
-/* =========================================================
-   GLOBAL RESET
-========================================================= */
-
+/* Global styles */
 * {
   box-sizing: border-box;
 }
@@ -47,6 +41,7 @@ html {
 
 body {
   position: relative;
+  isolation: isolate;
 
   margin: 0;
   min-height: 100vh;
@@ -54,32 +49,20 @@ body {
 
   background: transparent;
   color: var(--foreground);
-
   font-family: var(--font-inter), sans-serif;
-
-  transition:
-    color 0.4s ease,
-    background-color 0.4s ease;
 }
-
-/* Keep the website content above the backgrounds. */
 
 body > * {
   position: relative;
   z-index: 1;
 }
 
-/* =========================================================
-   LIGHT-MODE SKY
-========================================================= */
-
+/* Light-mode sky */
 body::before {
   content: "";
-
   position: fixed;
-  inset: -8%;
+  inset: 0;
   z-index: -2;
-
   pointer-events: none;
 
   background:
@@ -104,24 +87,15 @@ body::before {
       #fce7f3 48%,
       #dbeafe 100%
     );
-
-  background-size: cover;
-  background-position: center;
-
-  animation: sky-movement 20s ease-in-out infinite;
 }
 
-/* Light-mode clouds and sparkles. */
-
+/* Light-mode clouds and sparkles */
 body::after {
   content: "";
-
   position: fixed;
-  inset: -12%;
+  inset: 0;
   z-index: -1;
-
   pointer-events: none;
-
   opacity: 0.7;
 
   background-image:
@@ -157,18 +131,11 @@ body::after {
     850px 440px,
     920px 480px,
     90px 90px;
-
-  animation: cloud-movement 28s ease-in-out infinite alternate;
 }
 
-/* =========================================================
-   DARK-MODE GALAXY
-========================================================= */
-
+/* Dark-mode galaxy */
 html.dark body::before {
-  opacity: 1;
-
-  background-image:
+  background:
     radial-gradient(
       circle at 15% 35%,
       rgba(236, 72, 153, 0.32),
@@ -201,20 +168,9 @@ html.dark body::before {
       #050817 72%,
       #010104 100%
     );
-
-  background-size: 100% 100%;
-  background-position: center;
-  background-repeat: no-repeat;
-
-  will-change: transform, filter;
-
-  animation: galaxy-movement 18s ease-in-out infinite;
 }
 
-/* =========================================================
-   DARK-MODE SMALL STARS
-========================================================= */
-
+/* Dark-mode stars */
 html.dark body::after {
   opacity: 0.95;
 
@@ -251,60 +207,32 @@ html.dark body::after {
     24px 36px,
     65px 18px,
     105px 80px;
-
-  filter:
-    drop-shadow(0 0 3px rgba(255, 255, 255, 0.6))
-    drop-shadow(0 0 7px rgba(236, 72, 153, 0.35));
-
-  will-change: transform, opacity, background-position;
-
-  animation:
-    stars-movement 26s linear infinite,
-    stars-twinkle 3.5s ease-in-out infinite alternate;
 }
 
-/* =========================================================
-   SHOOTING-STAR LAYER
-========================================================= */
-
+/* Shooting-star layer */
 .shooting-stars {
   position: fixed;
   inset: 0;
   z-index: 2;
-
-  width: 100vw;
-  height: 100vh;
-
+  width: 100%;
+  height: 100%;
   overflow: hidden;
   pointer-events: none;
 }
-
-/* Shooting stars are only visible in dark mode. */
 
 html:not(.dark) .shooting-stars {
   display: none;
 }
 
-/* =========================================================
-   INDIVIDUAL SHOOTING STAR
-========================================================= */
-
 .shooting-star {
   position: absolute;
-
   top: var(--star-top);
   left: var(--star-left);
 
   width: var(--star-width);
   height: 2px;
-
   opacity: 0;
   border-radius: 999px;
-
-  /*
-   * The left side is the bright meteor head.
-   * The right side fades into the tail.
-   */
 
   background: linear-gradient(
     90deg,
@@ -322,94 +250,44 @@ html:not(.dark) .shooting-stars {
 
   transform-origin: left center;
 
-  will-change: transform, opacity;
-
-  animation:
-    meteor-shower
-    var(--star-duration)
+  animation: meteor-shower
+    var(--star-duration, 12s)
     linear
-    var(--star-delay)
+    var(--star-delay, 0s)
     infinite;
 }
 
-/* Bright meteor head on the lower-left end. */
-
 .shooting-star::before {
   content: "";
-
   position: absolute;
   top: 50%;
   left: -2px;
 
   width: 5px;
   height: 5px;
-
   border-radius: 50%;
-
   background: #ffffff;
 
   box-shadow:
     0 0 4px #ffffff,
-    0 0 8px rgba(219, 234, 254, 0.95),
-    0 0 15px rgba(147, 197, 253, 0.6);
+    0 0 8px rgba(219, 234, 254, 0.95);
 
   transform: translateY(-50%);
 }
 
-/* Soft light around the meteor head. */
-
-.shooting-star::after {
-  content: "";
-
-  position: absolute;
-  top: 50%;
-  left: -6px;
-
-  width: 14px;
-  height: 14px;
-
-  border-radius: 50%;
-
-  background: rgba(255, 255, 255, 0.12);
-
-  filter: blur(4px);
-
-  transform: translateY(-50%);
-}
-
-/* =========================================================
-   FIXED BACKGROUND GRID
-========================================================= */
-
+/* Fixed grid */
 .fixed-background-grid {
   position: fixed;
   inset: 0;
   z-index: 0;
-
   pointer-events: none;
-
   opacity: 0.25;
 
   background-image:
-    linear-gradient(
-      var(--grid-color) 1px,
-      transparent 1px
-    ),
-    linear-gradient(
-      90deg,
-      var(--grid-color) 1px,
-      transparent 1px
-    );
+    linear-gradient(var(--grid-color) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
 
   background-size: 48px 48px;
-
-  mask-image: linear-gradient(
-    to bottom,
-    transparent,
-    black 20%,
-    black 75%,
-    transparent
-  );
 
   -webkit-mask-image: linear-gradient(
     to bottom,
@@ -418,127 +296,24 @@ html:not(.dark) .shooting-stars {
     black 75%,
     transparent
   );
+
+  mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    black 20%,
+    black 75%,
+    transparent
+  );
 }
 
-/* =========================================================
-   BACKGROUND ANIMATIONS
-========================================================= */
-
-@keyframes sky-movement {
-  0%,
-  100% {
-    transform: translate3d(-1%, 0, 0) scale(1.04);
-  }
-
-  50% {
-    transform: translate3d(1%, -1%, 0) scale(1.07);
-  }
-}
-
-@keyframes cloud-movement {
-  from {
-    transform: translate3d(-2%, 0, 0) scale(1);
-  }
-
-  to {
-    transform: translate3d(2%, -1%, 0) scale(1.04);
-  }
-}
-
-@keyframes galaxy-movement {
-  0%,
-  100% {
-    transform: translate3d(-1.5%, -1%, 0) scale(1.05);
-    filter: saturate(1) brightness(0.85);
-  }
-
-  25% {
-    transform: translate3d(1%, -1.5%, 0) scale(1.08);
-    filter: saturate(1.12) brightness(0.92);
-  }
-
-  50% {
-    transform: translate3d(1.5%, 1%, 0) scale(1.06);
-    filter: saturate(1.2) brightness(1);
-  }
-
-  75% {
-    transform: translate3d(-1%, 1.5%, 0) scale(1.09);
-    filter: saturate(1.1) brightness(0.92);
-  }
-}
-
-@keyframes stars-movement {
-  0% {
-    transform: translate3d(0, 0, 0) scale(1);
-
-    background-position:
-      0 0,
-      24px 36px,
-      65px 18px,
-      105px 80px;
-  }
-
-  50% {
-    transform: translate3d(-1.5%, 1%, 0) scale(1.025);
-  }
-
-  100% {
-    transform: translate3d(-3%, 2%, 0) scale(1.05);
-
-    background-position:
-      72px 144px,
-      -91px 266px,
-      230px 348px,
-      -115px 520px;
-  }
-}
-
-@keyframes stars-twinkle {
-  0% {
-    opacity: 0.55;
-
-    filter:
-      brightness(0.8)
-      drop-shadow(0 0 2px rgba(255, 255, 255, 0.35))
-      drop-shadow(0 0 5px rgba(236, 72, 153, 0.2));
-  }
-
-  50% {
-    opacity: 1;
-
-    filter:
-      brightness(1.4)
-      drop-shadow(0 0 4px rgba(255, 255, 255, 0.8))
-      drop-shadow(0 0 9px rgba(236, 72, 153, 0.5));
-  }
-
-  100% {
-    opacity: 0.72;
-
-    filter:
-      brightness(1.05)
-      drop-shadow(0 0 3px rgba(255, 255, 255, 0.5))
-      drop-shadow(0 0 7px rgba(139, 92, 246, 0.4));
-  }
-}
-
-/* =========================================================
-   SHOOTING-STAR ANIMATION
-========================================================= */
-
+/* Only the small shooting stars animate */
 @keyframes meteor-shower {
   0% {
     opacity: 0;
-
     transform:
       translate3d(0, 0, 0)
       rotate(var(--star-angle))
       scaleX(0.3);
-  }
-
-  5% {
-    opacity: 0;
   }
 
   10% {
@@ -547,25 +322,15 @@ html:not(.dark) .shooting-stars {
 
   35% {
     opacity: 1;
-
     transform:
       translate3d(-36vw, 24vh, 0)
       rotate(var(--star-angle))
       scaleX(1);
   }
 
-  60% {
-    opacity: 0;
-
-    transform:
-      translate3d(-85vw, 57vh, 0)
-      rotate(var(--star-angle))
-      scaleX(0.55);
-  }
-
+  60%,
   100% {
     opacity: 0;
-
     transform:
       translate3d(-85vw, 57vh, 0)
       rotate(var(--star-angle))
@@ -573,10 +338,7 @@ html:not(.dark) .shooting-stars {
   }
 }
 
-/* =========================================================
-   REUSABLE STYLES
-========================================================= */
-
+/* Reusable styles */
 ::selection {
   background: rgba(236, 72, 153, 0.35);
 }
@@ -585,8 +347,9 @@ html:not(.dark) .shooting-stars {
   border: 1px solid var(--glass-border);
   background: var(--glass-bg);
 
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
+  /* A smaller blur is easier to render during scrolling. */
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
 
   transition:
     background-color 0.4s ease,
@@ -604,12 +367,11 @@ html:not(.dark) .shooting-stars {
 }
 
 .card-grid {
-  background:
-    linear-gradient(
-      135deg,
-      rgba(236, 72, 153, 0.08),
-      rgba(255, 255, 255, 0.025)
-    );
+  background: linear-gradient(
+    135deg,
+    rgba(236, 72, 153, 0.08),
+    rgba(255, 255, 255, 0.025)
+  );
 }
 
 .focus-ring:focus-visible {
@@ -617,10 +379,7 @@ html:not(.dark) .shooting-stars {
   outline-offset: 4px;
 }
 
-/* =========================================================
-   LIGHT-MODE TEXT CORRECTIONS
-========================================================= */
-
+/* Light-mode text colors */
 html:not(.dark) .text-white {
   color: #211018 !important;
 }
@@ -647,25 +406,11 @@ html:not(.dark) .text-pink-500 {
   color: #be185d !important;
 }
 
-/* =========================================================
-   MOBILE
-========================================================= */
-
+/* Mobile */
 @media (max-width: 768px) {
   .section-wrap {
     width: min(100% - 1.25rem, 1180px);
     padding-block: 4rem;
-  }
-
-  html.dark body::before {
-    background-size: cover;
-    animation-duration: 22s;
-  }
-
-  html.dark body::after {
-    animation:
-      stars-movement 32s linear infinite,
-      stars-twinkle 4s ease-in-out infinite alternate;
   }
 
   .shooting-star {
@@ -677,22 +422,28 @@ html:not(.dark) .text-pink-500 {
     width: 3px;
     height: 3px;
   }
+
+  .glass {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
 }
 
-/* =========================================================
-   ACCESSIBILITY
-========================================================= */
-
+/* Respect reduced-motion settings */
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
   }
 
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    scroll-behavior: auto !important;
+  .shooting-star {
+    animation: none;
+    display: none;
   }
+}/* Hide the scrollbar while keeping scrolling enabled */
+html {
+  scrollbar-width: none;
+}
+
+html::-webkit-scrollbar {
+  display: none;
 }
