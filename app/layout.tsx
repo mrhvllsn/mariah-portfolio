@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import type { ReactNode } from "react";
 import { Inter, JetBrains_Mono } from "next/font/google";
 
 import "./globals.css";
@@ -22,12 +23,17 @@ export const metadata: Metadata = {
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: ReactNode;
 }>) {
   return (
-    <html lang="en" className="scroll-smooth" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
       <body className={`${inter.variable} ${mono.variable}`}>
-        <div aria-hidden="true" className="fixed-background-grid" />
+        <div className="star-background" aria-hidden="true">
+          <div id="stars" />
+          <div id="stars2" />
+          <div id="stars3" />
+          <div className="star-background-glow" />
+        </div>
 
         {children}
       </body>

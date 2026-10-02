@@ -1,14 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import {
-  useEffect,
-  useId,
-  useRef,
-  useState,
-  type PointerEvent,
-  type ReactNode,
-} from "react";
+import { useState, type ReactNode } from "react";
 import { motion } from "framer-motion";
 import {
   Code2,
@@ -18,6 +11,7 @@ import {
   Palette,
   Sparkles,
 } from "lucide-react";
+
 import { profile } from "@/data/portfolio";
 
 const skills = [
@@ -53,7 +47,11 @@ export default function About() {
       id="about"
       className="relative isolate min-h-screen overflow-hidden bg-transparent px-4 py-24 sm:px-6 lg:px-8"
     >
-      <div className="pointer-events-none absolute inset-0 -z-20">
+      {/* Background decoration */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 -z-20"
+      >
         <motion.div
           animate={{
             x: [0, 80, 0],
@@ -109,6 +107,7 @@ export default function About() {
       </div>
 
       <div className="mx-auto max-w-7xl">
+        {/* Heading */}
         <motion.div
           initial={{ opacity: 0, y: 25 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -118,6 +117,7 @@ export default function About() {
         >
           <div className="mx-auto inline-flex items-center gap-2 rounded-full border border-pink-300/30 bg-pink-500/5 px-4 py-2 backdrop-blur-xl dark:border-pink-400/15">
             <Sparkles size={14} className="text-pink-500" />
+
             <span className="font-mono text-xs uppercase tracking-[0.28em] text-pink-600 dark:text-pink-300">
               02 / About Me
             </span>
@@ -137,6 +137,7 @@ export default function About() {
         </motion.div>
 
         <div className="grid gap-5 lg:grid-cols-12">
+          {/* Introduction */}
           <motion.article
             initial={{ opacity: 0, x: -40 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -184,8 +185,10 @@ export default function About() {
             </div>
           </motion.article>
 
-          <SymbiotePortrait />
+          {/* Flipping picture frame */}
+          <FlipPortrait />
 
+          {/* Education */}
           <motion.article
             initial={{ opacity: 0, y: 35 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -211,6 +214,7 @@ export default function About() {
             </p>
           </motion.article>
 
+          {/* Main focus */}
           <motion.article
             initial={{ opacity: 0, y: 35 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -239,6 +243,7 @@ export default function About() {
             </div>
           </motion.article>
 
+          {/* Beyond coding */}
           <motion.article
             initial={{ opacity: 0, y: 35 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -254,7 +259,9 @@ export default function About() {
               Beyond Coding
             </p>
 
-            <h3 className="mt-3 text-xl font-bold">Extrovert and creative</h3>
+            <h3 className="mt-3 text-xl font-bold">
+              Extrovert and creative
+            </h3>
 
             <p className="mt-3 text-sm leading-6 text-white/80">
               I enjoy playing mobile games, watching movies, eating good food,
@@ -262,6 +269,7 @@ export default function About() {
             </p>
           </motion.article>
 
+          {/* Current goals */}
           <motion.article
             initial={{ opacity: 0, y: 35 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -274,11 +282,13 @@ export default function About() {
                 title="Frontend"
                 text="Improving React and Tailwind CSS"
               />
+
               <StatusItem
                 icon={<Layers3 size={19} />}
                 title="Design"
                 text="Creating interfaces using Figma"
               />
+
               <StatusItem
                 icon={<Sparkles size={19} />}
                 title="Current Goal"
@@ -292,218 +302,203 @@ export default function About() {
   );
 }
 
-type RevealSpot = {
-  id: number;
-  x: number;
-  y: number;
-  radius: number;
-};
+// Flip animation adapted from Uiverse.io by IWhat1.
+function FlipPortrait() {
+  const [flipped, setFlipped] = useState(false);
+  const [hovered, setHovered] = useState(false);
 
-function SymbiotePortrait() {
-  const frameRef = useRef<HTMLDivElement>(null);
-  const uniqueId = useId().replace(/:/g, "");
-  const maskId = `${uniqueId}-mask`;
-  const warpId = `${uniqueId}-warp`;
-
-  const nextId = useRef(0);
-  const lastPoint = useRef({ x: -1000, y: -1000, time: 0 });
-  const clearTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  const [size, setSize] = useState({ width: 400, height: 500 });
-  const [spots, setSpots] = useState<RevealSpot[]>([]);
-  const [active, setActive] = useState(false);
-
-  useEffect(() => {
-    const frame = frameRef.current;
-    if (!frame) return;
-
-    const observer = new ResizeObserver(() => {
-      setSize({
-        width: frame.clientWidth,
-        height: frame.clientHeight,
-      });
-    });
-
-    observer.observe(frame);
-
-    return () => {
-      observer.disconnect();
-      if (clearTimer.current) clearTimeout(clearTimer.current);
-    };
-  }, []);
-
-  const paint = (event: PointerEvent<HTMLDivElement>) => {
-    const frame = frameRef.current;
-    if (!frame) return;
-
-    const bounds = frame.getBoundingClientRect();
-    const x = event.clientX - bounds.left;
-    const y = event.clientY - bounds.top;
-    const now = performance.now();
-
-    if (
-      Math.hypot(x - lastPoint.current.x, y - lastPoint.current.y) < 32 &&
-      now - lastPoint.current.time < 110
-    ) {
-      return;
-    }
-
-    lastPoint.current = { x, y, time: now };
-
-    if (clearTimer.current) clearTimeout(clearTimer.current);
-
-    setActive(true);
-
-    setSpots((previous) => [
-      ...previous.slice(-44),
-      {
-        id: ++nextId.current,
-        x,
-        y,
-        radius: Math.min(bounds.width * 0.32, 135),
-      },
-    ]);
-  };
-
-  const retreat = () => {
-    setActive(false);
-    clearTimer.current = setTimeout(() => setSpots([]), 1900);
-  };
+  const showBack = flipped || hovered;
 
   return (
     <motion.div
-      ref={frameRef}
       initial={{ opacity: 0, x: 40 }}
       whileInView={{ opacity: 1, x: 0 }}
       viewport={{ once: true, amount: 0.2 }}
       transition={{ duration: 0.65 }}
-      onPointerEnter={(event) => {
-        if (event.pointerType === "mouse") paint(event);
-      }}
-      onPointerMove={(event) => {
-        if (event.pointerType === "mouse" || event.buttons > 0) {
-          paint(event);
-        }
-      }}
-      onPointerLeave={retreat}
-      onPointerDown={(event) => {
-        if (event.pointerType !== "mouse") paint(event);
-      }}
-      className="group relative min-h-[470px] select-none overflow-hidden rounded-[2rem] border border-pink-300/30 bg-zinc-950 text-left shadow-[0_30px_80px_rgba(236,72,153,0.16)] lg:col-span-5"
-      style={{ touchAction: "none" }}
+      className="portrait-container lg:col-span-5"
     >
-      {/* Your real photo */}
-      <Image
-        src="/images/me3.jpeg"
-        alt="Mariah Villasan portrait"
-        fill
-        priority
-        className="object-cover"
-        sizes="(max-width: 1024px) 100vw, 42vw"
-      />
-
-      {/* Slowly spreading anime reveal */}
-      <svg
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 h-full w-full"
-        viewBox={`0 0 ${size.width} ${size.height}`}
-        preserveAspectRatio="none"
+      <button
+        type="button"
+        className="portrait-toggle"
+        aria-label="Flip between my portrait and em.png image"
+        aria-pressed={showBack}
+        onPointerEnter={(event) => {
+          if (event.pointerType === "mouse") {
+            setHovered(true);
+          }
+        }}
+        onPointerLeave={() => setHovered(false)}
+        onClick={() => {
+          setFlipped(!showBack);
+          setHovered(false);
+        }}
       >
-        <defs>
-          {/* Warps the reveal edge so it is not a perfect circle. */}
-          <filter
-            id={warpId}
-            x="-35%"
-            y="-35%"
-            width="170%"
-            height="170%"
-            colorInterpolationFilters="sRGB"
+        <span
+          className={`portrait-card${showBack ? " is-flipped" : ""}`}
+        >
+          {/* Front picture */}
+          <span
+            className="portrait-face portrait-front"
+            aria-hidden={showBack}
           >
-            <feTurbulence
-              type="fractalNoise"
-              baseFrequency="0.018"
-              numOctaves="3"
-              seed="8"
-              result="noise"
-            />
-            <feDisplacementMap
-              in="SourceGraphic"
-              in2="noise"
-              scale="34"
-              xChannelSelector="R"
-              yChannelSelector="G"
-            />
-          </filter>
+            <span className="portrait-photo">
+              <Image
+                src="/images/me3.jpeg"
+                alt="Mariah Villasan portrait"
+                fill
+                className="object-cover"
+                sizes="(max-width: 1024px) 100vw, 42vw"
+              />
+            </span>
 
-          <mask
-            id={maskId}
-            maskUnits="userSpaceOnUse"
-            maskContentUnits="userSpaceOnUse"
-            x="0"
-            y="0"
-            width={size.width}
-            height={size.height}
+            <span className="portrait-caption">
+              <span className="portrait-heading">
+                {profile.name}
+              </span>
+
+              <span className="portrait-description">
+                Hover or tap to see my other side
+              </span>
+            </span>
+          </span>
+
+          {/* Back picture */}
+          <span
+            className="portrait-face portrait-back"
+            aria-hidden={!showBack}
           >
-            <rect
-              width={size.width}
-              height={size.height}
-              fill="black"
-            />
+            <span className="portrait-photo">
+              <Image
+                src="/images/em.png"
+                alt="The other side of Mariah's portrait card"
+                fill
+                className="object-cover"
+                sizes="(max-width: 1024px) 100vw, 42vw"
+              />
+            </span>
 
-            <g fill="white" filter={`url(#${warpId})`}>
-              {spots.flatMap((spot) =>
-                [
-                  { dx: 0, dy: 0, scale: 1, delay: 0 },
-                  { dx: 0.58, dy: -0.26, scale: 0.58, delay: 0.24 },
-                  { dx: -0.43, dy: 0.48, scale: 0.49, delay: 0.42 },
-                  { dx: -0.65, dy: -0.28, scale: 0.26, delay: 0.7 },
-                ].map((lobe, index) => (
-                  <motion.circle
-                    key={`${spot.id}-${index}`}
-                    cx={spot.x + lobe.dx * spot.radius}
-                    cy={spot.y + lobe.dy * spot.radius}
-                    initial={{ r: 0 }}
-                    animate={{
-                      r: active ? spot.radius * lobe.scale : 0,
-                    }}
-                    transition={{
-                      duration: active ? 3.8 : 1.7,
-                      delay: active ? lobe.delay : 0,
-                      ease: [0.22, 0.61, 0.36, 1],
-                    }}
-                  />
-                )),
-              )}
-            </g>
-          </mask>
-        </defs>
+            <span className="portrait-caption">
+              <span className="portrait-heading">
+                Two sides of me
+              </span>
 
-        <image
-          href="/images/anime.png"
-          x="0"
-          y="0"
-          width={size.width}
-          height={size.height}
-          preserveAspectRatio="xMidYMid slice"
-          mask={`url(#${maskId})`}
-        />
-      </svg>
-
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-black/10" />
-
-      <div className="pointer-events-none absolute bottom-0 left-0 right-0 p-6 sm:p-8">
-        <span className="inline-flex rounded-full border border-white/20 bg-black/45 px-4 py-2 text-xs font-medium text-white">
-          Hover or drag to transform
+              <span className="portrait-description">
+                A little more about me, beyond the code.
+              </span>
+            </span>
+          </span>
         </span>
+      </button>
 
-        <p className="mt-4 text-2xl font-black text-white">
-          Two sides of me
-        </p>
+      <style jsx>{`
+        .portrait-container {
+          width: 100%;
+          min-height: 470px;
+          perspective: 900px;
+        }
 
-        <p className="mt-2 text-sm text-white/80">
-          A little more about me, beyond the code.
-        </p>
-      </div>
+        .portrait-toggle {
+          display: block;
+          position: relative;
+          width: 100%;
+          height: 100%;
+          min-height: 470px;
+          padding: 0;
+          border: 0;
+          border-radius: 2rem;
+          background: transparent;
+          text-align: left;
+          cursor: pointer;
+          -webkit-tap-highlight-color: transparent;
+        }
+
+        .portrait-toggle:focus-visible {
+          outline: 3px solid #0aa4f8;
+          outline-offset: 6px;
+        }
+
+        .portrait-card {
+          display: block;
+          position: absolute;
+          inset: 0;
+          border-radius: 2rem;
+          transition: transform 1500ms;
+          transform-style: preserve-3d;
+        }
+
+        .portrait-card.is-flipped {
+          transform: rotateY(180deg) rotateZ(180deg);
+        }
+
+        .portrait-face {
+          display: block;
+          position: absolute;
+          inset: 0;
+          padding: 6px;
+          border-radius: 2rem;
+          box-shadow: 0 0 10px 2px rgba(50, 50, 50, 0.5);
+          backface-visibility: hidden;
+          -webkit-backface-visibility: hidden;
+          color: aliceblue;
+          background: linear-gradient(
+            -135deg,
+            #f80a4a,
+            #0aa4f8
+          );
+        }
+
+        .portrait-back {
+          transform: rotateY(180deg) rotateZ(180deg);
+        }
+
+        .portrait-photo {
+          display: block;
+          position: absolute;
+          inset: 6px;
+          overflow: hidden;
+          border-radius: calc(2rem - 6px);
+          background: #18181b;
+        }
+
+        .portrait-caption {
+          display: flex;
+          position: absolute;
+          inset: 6px;
+          flex-direction: column;
+          justify-content: flex-end;
+          gap: 12px;
+          padding: 28px;
+          border-radius: calc(2rem - 6px);
+          background: linear-gradient(
+            to top,
+            rgba(0, 0, 0, 0.85),
+            transparent 60%
+          );
+        }
+
+        .portrait-heading {
+          font-size: 28px;
+          font-weight: bold;
+          line-height: 1.2;
+          font-family:
+            -apple-system,
+            BlinkMacSystemFont,
+            "Segoe UI",
+            sans-serif;
+        }
+
+        .portrait-description {
+          font-size: 14px;
+          line-height: 1.6;
+          color: rgba(255, 255, 255, 0.85);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .portrait-card {
+            transition: none;
+          }
+        }
+      `}</style>
     </motion.div>
   );
 }
@@ -525,6 +520,7 @@ function StatusItem({ icon, title, text }: StatusItemProps) {
         <p className="text-sm font-bold text-zinc-900 dark:text-white">
           {title}
         </p>
+
         <p className="mt-1 text-xs leading-5 text-zinc-500 dark:text-zinc-400">
           {text}
         </p>

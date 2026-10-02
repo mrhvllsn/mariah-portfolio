@@ -6,7 +6,7 @@
 :root {
   color-scheme: light;
 
-  --background: #eef7ff;
+  --background: #fff1f8;
   --foreground: #211018;
 
   --pink: #ec4899;
@@ -15,7 +15,8 @@
 
   --glass-bg: rgba(255, 255, 255, 0.68);
   --glass-border: rgba(236, 72, 153, 0.2);
-  --grid-color: rgba(236, 72, 153, 0.07);
+
+  --star-color: rgba(190, 24, 93, 0.45);
 }
 
 html.dark {
@@ -26,7 +27,8 @@ html.dark {
 
   --glass-bg: rgba(12, 5, 16, 0.72);
   --glass-border: rgba(244, 114, 182, 0.2);
-  --grid-color: rgba(255, 255, 255, 0.035);
+
+  --star-color: rgba(255, 235, 249, 0.9);
 }
 
 /* Global styles */
@@ -37,12 +39,16 @@ html.dark {
 html {
   scroll-behavior: smooth;
   background: var(--background);
+  scrollbar-width: none;
+}
+
+html::-webkit-scrollbar {
+  display: none;
 }
 
 body {
   position: relative;
   isolation: isolate;
-
   margin: 0;
   min-height: 100vh;
   overflow-x: hidden;
@@ -52,289 +58,193 @@ body {
   font-family: var(--font-inter), sans-serif;
 }
 
-body > * {
-  position: relative;
-  z-index: 1;
-}
-
-/* Light-mode sky */
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: -2;
-  pointer-events: none;
-
-  background:
-    radial-gradient(
-      circle at 15% 18%,
-      rgba(255, 255, 255, 0.95) 0 3%,
-      transparent 12%
-    ),
-    radial-gradient(
-      circle at 80% 15%,
-      rgba(255, 218, 238, 0.78),
-      transparent 27%
-    ),
-    radial-gradient(
-      circle at 25% 82%,
-      rgba(189, 221, 255, 0.75),
-      transparent 33%
-    ),
-    linear-gradient(
-      145deg,
-      #eaf7ff 0%,
-      #fce7f3 48%,
-      #dbeafe 100%
-    );
-}
-
-/* Light-mode clouds and sparkles */
-body::after {
-  content: "";
+/* Fixed background container */
+body > .star-background {
   position: fixed;
   inset: 0;
   z-index: -1;
+  overflow: hidden;
   pointer-events: none;
-  opacity: 0.7;
+  user-select: none;
 
-  background-image:
-    radial-gradient(
-      ellipse at 15% 30%,
-      rgba(255, 255, 255, 0.78) 0 7%,
-      transparent 15%
-    ),
-    radial-gradient(
-      ellipse at 31% 34%,
-      rgba(255, 255, 255, 0.62) 0 9%,
-      transparent 18%
-    ),
-    radial-gradient(
-      ellipse at 72% 69%,
-      rgba(255, 255, 255, 0.67) 0 8%,
-      transparent 17%
-    ),
-    radial-gradient(
-      ellipse at 87% 64%,
-      rgba(255, 255, 255, 0.55) 0 7%,
-      transparent 16%
-    ),
-    radial-gradient(
-      circle,
-      rgba(236, 72, 153, 0.65) 0 1px,
-      transparent 2px
-    );
-
-  background-size:
-    800px 420px,
-    900px 460px,
-    850px 440px,
-    920px 480px,
-    90px 90px;
-}
-
-/* Dark-mode galaxy */
-html.dark body::before {
   background:
     radial-gradient(
-      circle at 15% 35%,
-      rgba(236, 72, 153, 0.32),
-      transparent 32%
-    ),
-    radial-gradient(
-      circle at 85% 25%,
-      rgba(139, 92, 246, 0.3),
-      transparent 34%
-    ),
-    radial-gradient(
-      circle at 55% 90%,
-      rgba(37, 99, 235, 0.25),
-      transparent 38%
-    ),
-    radial-gradient(
-      ellipse at 50% 50%,
-      rgba(168, 85, 247, 0.12),
-      transparent 52%
-    ),
-    radial-gradient(
-      ellipse at 40% 70%,
-      rgba(236, 72, 153, 0.08),
+      ellipse at 15% 25%,
+      rgba(249, 168, 212, 0.45),
       transparent 45%
+    ),
+    radial-gradient(
+      ellipse at 85% 20%,
+      rgba(196, 181, 253, 0.4),
+      transparent 45%
+    ),
+    radial-gradient(
+      ellipse at 50% 90%,
+      rgba(251, 207, 232, 0.5),
+      transparent 50%
     ),
     linear-gradient(
       145deg,
-      #010003 0%,
-      #08020f 42%,
-      #050817 72%,
-      #010104 100%
+      #fff7fb 0%,
+      #fce7f3 45%,
+      #ede9fe 100%
     );
 }
 
-/* Dark-mode stars */
-html.dark body::after {
-  opacity: 0.95;
-
-  background-image:
+html.dark body > .star-background {
+  background:
     radial-gradient(
-      circle,
-      rgba(255, 255, 255, 1) 0 1px,
-      transparent 1.8px
+      ellipse at 15% 30%,
+      rgba(236, 72, 153, 0.2),
+      transparent 45%
     ),
     radial-gradient(
-      circle,
-      rgba(249, 168, 212, 0.95) 0 1.2px,
-      transparent 2px
+      ellipse at 85% 20%,
+      rgba(139, 92, 246, 0.22),
+      transparent 45%
     ),
     radial-gradient(
-      circle,
-      rgba(196, 181, 253, 0.9) 0 1.4px,
-      transparent 2.2px
+      ellipse at 50% 90%,
+      rgba(126, 34, 206, 0.15),
+      transparent 50%
     ),
-    radial-gradient(
-      circle,
-      rgba(147, 197, 253, 0.85) 0 0.8px,
-      transparent 1.8px
+    linear-gradient(
+      145deg,
+      #030106 0%,
+      #100619 45%,
+      #080311 100%
     );
-
-  background-size:
-    72px 72px,
-    115px 115px,
-    165px 165px,
-    220px 220px;
-
-  background-position:
-    0 0,
-    24px 36px,
-    65px 18px,
-    105px 80px;
 }
 
-/* Shooting-star layer */
-.shooting-stars {
-  position: fixed;
-  inset: 0;
-  z-index: 2;
+/* Each layer repeats vertically for seamless movement */
+#stars,
+#stars2,
+#stars3 {
+  position: absolute;
+  top: -100%;
+  left: 0;
   width: 100%;
-  height: 100%;
-  overflow: hidden;
-  pointer-events: none;
+  height: 200%;
+  background-repeat: repeat;
+  animation-name: stars-rise;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
 }
 
-html:not(.dark) .shooting-stars {
-  display: none;
-}
-
-.shooting-star {
-  position: absolute;
-  top: var(--star-top);
-  left: var(--star-left);
-
-  width: var(--star-width);
-  height: 2px;
-  opacity: 0;
-  border-radius: 999px;
-
-  background: linear-gradient(
-    90deg,
-    #ffffff 0%,
-    rgba(255, 255, 255, 0.95) 4%,
-    rgba(224, 242, 254, 0.75) 18%,
-    rgba(191, 219, 254, 0.35) 45%,
-    rgba(147, 197, 253, 0.1) 72%,
-    transparent 100%
-  );
-
-  box-shadow:
-    0 0 2px rgba(255, 255, 255, 0.9),
-    0 0 5px rgba(191, 219, 254, 0.55);
-
-  transform-origin: left center;
-
-  animation: meteor-shower
-    var(--star-duration, 12s)
-    linear
-    var(--star-delay, 0s)
-    infinite;
-}
-
-.shooting-star::before {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: -2px;
-
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: #ffffff;
-
-  box-shadow:
-    0 0 4px #ffffff,
-    0 0 8px rgba(219, 234, 254, 0.95);
-
-  transform: translateY(-50%);
-}
-
-/* Fixed grid */
-.fixed-background-grid {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  opacity: 0.25;
-
+/* Small stars */
+#stars {
+  opacity: 0.65;
   background-image:
-    linear-gradient(var(--grid-color) 1px, transparent 1px),
-    linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+    radial-gradient(
+      circle at 18px 24px,
+      var(--star-color) 0 0.7px,
+      transparent 1.2px
+    ),
+    radial-gradient(
+      circle at 93px 112px,
+      var(--star-color) 0 0.6px,
+      transparent 1.1px
+    ),
+    radial-gradient(
+      circle at 154px 63px,
+      var(--star-color) 0 0.8px,
+      transparent 1.3px
+    );
 
-  background-size: 48px 48px;
+  background-size: 197px 173px;
+  animation-duration: 160s;
+}
 
-  -webkit-mask-image: linear-gradient(
-    to bottom,
-    transparent,
-    black 20%,
-    black 75%,
-    transparent
-  );
+/* Medium stars */
+#stars2 {
+  opacity: 0.75;
+  background-image:
+    radial-gradient(
+      circle at 47px 82px,
+      var(--star-color) 0 1px,
+      transparent 1.7px
+    ),
+    radial-gradient(
+      circle at 216px 195px,
+      var(--star-color) 0 1.1px,
+      transparent 1.8px
+    ),
+    radial-gradient(
+      circle at 305px 34px,
+      var(--star-color) 0 0.9px,
+      transparent 1.6px
+    );
 
-  mask-image: linear-gradient(
-    to bottom,
-    transparent,
-    black 20%,
-    black 75%,
-    transparent
+  background-size: 367px 293px;
+  animation-duration: 110s;
+}
+
+/* Large stars */
+#stars3 {
+  opacity: 0.85;
+  background-image:
+    radial-gradient(
+      circle at 112px 146px,
+      var(--star-color) 0 1.5px,
+      transparent 2.4px
+    ),
+    radial-gradient(
+      circle at 425px 310px,
+      var(--star-color) 0 1.3px,
+      transparent 2.2px
+    );
+
+  background-size: 593px 457px;
+  animation-duration: 75s;
+}
+
+/* Subtle background glow */
+.star-background-glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 30%,
+    rgba(236, 72, 153, 0.04) 100%
   );
 }
 
-/* Only the small shooting stars animate */
-@keyframes meteor-shower {
-  0% {
-    opacity: 0;
-    transform:
-      translate3d(0, 0, 0)
-      rotate(var(--star-angle))
-      scaleX(0.3);
+/* Move exactly one repeating tile to avoid a visible jump */
+@keyframes stars-rise {
+  from {
+    transform: translateY(0);
   }
 
-  10% {
-    opacity: 1;
+  to {
+    transform: translateY(-173px);
+  }
+}
+
+#stars2 {
+  animation-name: stars-rise-medium;
+}
+
+#stars3 {
+  animation-name: stars-rise-large;
+}
+
+@keyframes stars-rise-medium {
+  from {
+    transform: translateY(0);
   }
 
-  35% {
-    opacity: 1;
-    transform:
-      translate3d(-36vw, 24vh, 0)
-      rotate(var(--star-angle))
-      scaleX(1);
+  to {
+    transform: translateY(-293px);
+  }
+}
+
+@keyframes stars-rise-large {
+  from {
+    transform: translateY(0);
   }
 
-  60%,
-  100% {
-    opacity: 0;
-    transform:
-      translate3d(-85vw, 57vh, 0)
-      rotate(var(--star-angle))
-      scaleX(0.55);
+  to {
+    transform: translateY(-457px);
   }
 }
 
@@ -346,8 +256,6 @@ html:not(.dark) .shooting-stars {
 .glass {
   border: 1px solid var(--glass-border);
   background: var(--glass-bg);
-
-  /* A smaller blur is easier to render during scrolling. */
   -webkit-backdrop-filter: blur(6px);
   backdrop-filter: blur(6px);
 
@@ -379,48 +287,11 @@ html:not(.dark) .shooting-stars {
   outline-offset: 4px;
 }
 
-/* Light-mode text colors */
-html:not(.dark) .text-white {
-  color: #211018 !important;
-}
-
-html:not(.dark) .text-white\/50,
-html:not(.dark) .text-white\/60 {
-  color: #6b4657 !important;
-}
-
-html:not(.dark) .text-white\/70 {
-  color: #51303f !important;
-}
-
-html:not(.dark) .text-white\/80 {
-  color: #38202b !important;
-}
-
-html:not(.dark) .text-pink-300,
-html:not(.dark) .text-pink-400 {
-  color: #db2777 !important;
-}
-
-html:not(.dark) .text-pink-500 {
-  color: #be185d !important;
-}
-
 /* Mobile */
 @media (max-width: 768px) {
   .section-wrap {
-    width: min(100% - 1.25rem, 1180px);
+    width: min(1180px, calc(100% - 1.25rem));
     padding-block: 4rem;
-  }
-
-  .shooting-star {
-    width: 110px;
-    height: 1px;
-  }
-
-  .shooting-star::before {
-    width: 3px;
-    height: 3px;
   }
 
   .glass {
@@ -429,21 +300,15 @@ html:not(.dark) .text-pink-500 {
   }
 }
 
-/* Respect reduced-motion settings */
+/* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
   html {
-    scroll-behavior: auto;
+    scroll-behavior: auto !important;
   }
 
-  .shooting-star {
+  #stars,
+  #stars2,
+  #stars3 {
     animation: none;
-    display: none;
   }
-}/* Hide the scrollbar while keeping scrolling enabled */
-html {
-  scrollbar-width: none;
-}
-
-html::-webkit-scrollbar {
-  display: none;
 }
